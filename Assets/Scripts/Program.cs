@@ -43,7 +43,7 @@ public class Program : MonoBehaviour {
         return sprites;
     }
 
-    private void startLearning() {
+    private void StartLearning() {
         cellAutomataGA = new CellAutomataGA(BOARD_SIZE);
 
         Task.Run(() => {
