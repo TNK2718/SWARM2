@@ -17,7 +17,7 @@ public class Program : MonoBehaviour {
 
     void Start() {
         cellSprites = initGameObjects();
-        startLearning();
+        StartLearning();
     }
 
     private List<List<GameObject>> initGameObjects() {

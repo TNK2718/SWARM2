@@ -111,7 +111,7 @@ namespace GeneticAlgorithm
 
         public int GetPopulation()
         {
-            return chromosomes.Count();
+            return chromosomes.Count;
         }
     }
 }

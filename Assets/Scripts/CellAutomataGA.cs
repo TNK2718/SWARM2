@@ -145,11 +145,8 @@ namespace GeneticAlgorithm
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes)
         {
             _intArrayChromosomes.SortChromosomes();
-            int index = 0;
             while (_intArrayChromosomes.GetPopulation() > POPULATION) {
-                Debug.Log("reducing");
-                _intArrayChromosomes.RemoveChromosome(_intArrayChromosomes.GetPopulation() - 1 - index);
-                index++;
+                _intArrayChromosomes.RemoveChromosome(_intArrayChromosomes.GetPopulation() - 1);
             }
         }
 
