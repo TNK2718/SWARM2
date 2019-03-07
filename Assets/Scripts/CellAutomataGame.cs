@@ -11,6 +11,8 @@ namespace GeneticAlgorithm
         public int boardSize;
         public Board board1;
         public Board board2;
+        public int resource1;
+        public int resource2;
 
         enum GameState
         {

@@ -9,16 +9,20 @@ namespace GeneticAlgorithm
     {
         private int BOARD_SIZE;
         public int CELL_STATE_SIZE = 8;
-        private int MOORE_NEIGHBORHOOD = 9;
+        private int NUM_MOORE_NEIGHBORHOOD = 9;
         public int[,] board;
         private int[,] board_buffer;
         private int[] rules;
+        public int Resource { get; set; }
+        public CellSpec[] CellSpecs { get; set; }
+
 
         public Board(int[] rules_in, int boardsize)
         {
             BOARD_SIZE = boardsize;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
+            CellSpecs = new CellSpec[CELL_STATE_SIZE];
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     SetCell(false, x, y, 0);
@@ -26,14 +30,6 @@ namespace GeneticAlgorithm
             }
             rules = rules_in;
             Array.Sort(rules);
-            /*Random random = new Random();
-            for(int i = 0; i < BOARDSIZE; i++) {
-                for(int j = 0; j < BOARDSIZE; j++) {
-                    if (random.Next(0, 9) >= 7) {
-                        SetCell(i, j, 1);
-                    }
-                }
-            }*/
             ClearBoard();
         }
 
@@ -59,7 +55,7 @@ namespace GeneticAlgorithm
         public int GetConditionsNo(int[,] board_in, int x, int y)
         {
             int result = 0;
-            for(int i = 0; i < MOORE_NEIGHBORHOOD; i++) {
+            for(int i = 0; i < NUM_MOORE_NEIGHBORHOOD; i++) {
                     result += FastPower(CELL_STATE_SIZE, i) * GetCell(board_in, x + i % 3 - 1, y + i / 3 - 1);
             }
             return result;
@@ -73,14 +69,23 @@ namespace GeneticAlgorithm
                     int rule = -1;
                     for(int i = 0; i < CELL_STATE_SIZE; i++) {
                         int index = Array.BinarySearch(
-                            rules, GetConditionsNo(board, x, y) + (CELL_STATE_SIZE - 1 - i) * FastPower(CELL_STATE_SIZE, MOORE_NEIGHBORHOOD));
+                            rules,
+                            GetConditionsNo(board, x, y) 
+                                + (CELL_STATE_SIZE - 1 - i) * FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)
+                            );
                         if (index >= 0) rule = rules[index];
                         if (rule >= 0) break;
                     }
-                    if (rule >= 0 && rule % FastPower(CELL_STATE_SIZE, MOORE_NEIGHBORHOOD) != 0) SetCell(false, x, y, rule / FastPower(CELL_STATE_SIZE, MOORE_NEIGHBORHOOD));
+                    if (rule >= 0 && rule % FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD) != 0)
+                        SetCell(false, x, y, rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD));
                 }
             }
             Array.Copy(board_buffer, board, BOARD_SIZE * BOARD_SIZE);
+        }
+
+        public void DeltaResuorce(int preState, int nextState, CellSpec[] _cellSpecs)
+        {
+
         }
 
         public int FastPower(int number, int power)
@@ -115,5 +120,17 @@ namespace GeneticAlgorithm
                 }
             }
         }
+    }
+
+    class CellSpec
+    {
+        public int Armor { get; set; }
+        public int Cost { get; set; }
+        public CellFunction CellFunction { get; set; }
+    }
+
+    public enum CellFunction
+    {
+
     }
 }
