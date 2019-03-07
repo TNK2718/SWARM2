@@ -47,7 +47,7 @@ public class Program : MonoBehaviour {
         cellAutomataGA = new CellAutomataGA(BOARD_SIZE);
 
         Task.Run(() => {
-            for(int i = 0; i < NUM_LEARNING_ITERATION; i++) {
+            for (int i = 0; i < NUM_LEARNING_ITERATION; i++) {
                 cellAutomataGA.NextGeneration();
                 Debug.Log("Episode" + i);
                 cellAutomataGA.ShowScores();
