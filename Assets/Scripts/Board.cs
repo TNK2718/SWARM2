@@ -12,11 +12,12 @@ namespace GeneticAlgorithm {
         public int[,] board;
         private int[,] board_buffer;
         private int[] rules;
+        private int resource;
         public int Resource {
-            get { return Resource; }
+            get { return resource; }
             set {
-                Resource = value;
-                if (value < 0) Resource = 0;
+                resource = value;
+                if (value < 0) resource = 0;
             }
         }
         public CellSpec[] CellSpecs { get; set; }
@@ -27,6 +28,7 @@ namespace GeneticAlgorithm {
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
             CellSpecs = new CellSpec[CELL_STATE_SIZE];
+            for (int i = 0; i < CELL_STATE_SIZE; i++) CellSpecs[i] = new CellSpec() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -125,6 +127,6 @@ namespace GeneticAlgorithm {
     }
 
     public enum CellFunction {
-
+        Normal, Eater, Turret
     }
 }
