@@ -8,7 +8,6 @@ using UnityEngine;
 namespace GeneticAlgorithm {
     public class CellAutomataGA {
         private const int POPULATION = 100;
-        private const int ELITE_POPULATION = 2;
         private const int CHROMOSOME_SIZE = 2000;
         private const int MOORE_NEIGHBORHOOD = 9;
         private const int CELL_STATE_SIZE = 8;
@@ -22,8 +21,6 @@ namespace GeneticAlgorithm {
         private int boardSize;
 
         private IntArrayChromosomes intArrayChromosomes;
-        private double[] scores;
-        private List<int> elitelist;
 
         public int[] rulesForEvalate;
 
@@ -32,8 +29,6 @@ namespace GeneticAlgorithm {
             chromosomeMaxNumber = FastPower(CELL_STATE_SIZE, MOORE_NEIGHBORHOOD + 1) - 1;
             intArrayChromosomes = new IntArrayChromosomes(POPULATION, CHROMOSOME_SIZE, chromosomeMaxNumber);
             SetUpChromosomes();
-            scores = new double[POPULATION];
-            elitelist = new List<int>();
 
             rulesForEvalate = new int[5]{
                 ConvertToConditionNo(new int[] { 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 }),
@@ -60,9 +55,8 @@ namespace GeneticAlgorithm {
 
         public void NextGeneration() {
             Evaluate();
-            SelectElite(ELITE_POPULATION);
             Crossover(intArrayChromosomes, CROSSOVER_RATE);
-            Mutation(intArrayChromosomes, MUTATION_RATE, elitelist, chromosomeMaxNumber);
+            Mutation(intArrayChromosomes, MUTATION_RATE, chromosomeMaxNumber);
             Reproduce_Ranking(intArrayChromosomes);
         }
 
@@ -86,7 +80,7 @@ namespace GeneticAlgorithm {
                 for (int n = 0; n < EPISODES_FOR_EVALATION; n++) {
                     cellAutomataGame.UpdateGameBoard();
                 }
-                scores[i] = EvaluateFunction(cellAutomataGame);
+                intArrayChromosomes.SetScore(i, EvaluateFunction(cellAutomataGame));
             }
         }
 
@@ -102,7 +96,7 @@ namespace GeneticAlgorithm {
             return Math.Abs(score1 / Math.Pow(cellAutomataGame.boardSize, 2) / score2);
         }
 
-        public void Mutation(IntArrayChromosomes intChromosomes, double mutationrate, List<int> _elitelist, int chromosomeMaxNumber) {
+        public void Mutation(IntArrayChromosomes intChromosomes, double mutationrate, int chromosomeMaxNumber) {
             System.Random random = new System.Random();
             for (int i = 0; i < POPULATION; i++) {
                 double rndnum = random.NextDouble();
@@ -111,25 +105,6 @@ namespace GeneticAlgorithm {
                         intChromosomes.SetChromosome(i, random.Next(0, CHROMOSOME_SIZE), random.Next(0, chromosomeMaxNumber));
                     }
                 }
-            }
-        }
-
-        public void SelectElite(int elitepopulation) {
-            elitelist.Clear();
-
-            double[] tmpscores = new double[POPULATION];//
-            scores.CopyTo(tmpscores, 0);//
-            Array.Sort(tmpscores);//sort
-            Array.Reverse(tmpscores);
-
-            double elitescore = tmpscores[elitepopulation - 1];
-            int count = 0;
-            for (int i = 0; i < POPULATION; i++) {
-                if (scores[i] >= elitescore) {
-                    elitelist.Add(i);
-                    count++;
-                }
-                if (count >= ELITE_POPULATION) break;
             }
         }
 
@@ -163,20 +138,12 @@ namespace GeneticAlgorithm {
         public void ShowScores() {
             Console.WriteLine("Scores:");
             for (int i = 0; i < POPULATION; i++) {
-                Console.WriteLine(scores[i]);
-            }
-        }
-
-        public void ShowEliteScores() {
-            Debug.Log("EliteScores");
-            foreach (int index in elitelist) {
-                Debug.Log(index);
-                Debug.Log(scores[index]);
+                Console.WriteLine(intArrayChromosomes.ReadScore(i));
             }
         }
 
         public int[] EliteRule() {
-            return intArrayChromosomes.ReadChromosomeAsRule(elitelist[0]);
+            return intArrayChromosomes.ReadChromosomeAsRule(0);
         }
     }
 }

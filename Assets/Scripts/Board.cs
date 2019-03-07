@@ -27,11 +27,6 @@ namespace GeneticAlgorithm {
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
             CellSpecs = new CellSpec[CELL_STATE_SIZE];
-            for (int x = 0; x < BOARD_SIZE; x++) {
-                for (int y = 0; y < BOARD_SIZE; y++) {
-                    SetCell(false, x, y, 0);
-                }
-            }
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -117,6 +112,7 @@ namespace GeneticAlgorithm {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     SetCell(true, x, y, 0);
+                    SetCell(false, x, y, 0);
                 }
             }
         }

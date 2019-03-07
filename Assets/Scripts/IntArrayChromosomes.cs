@@ -71,6 +71,14 @@ namespace GeneticAlgorithm {
             chromosomes.RemoveAt(individual);
         }
 
+        public override double ReadScore(int individual) {
+            return chromosomes[individual].score;
+        }
+
+        public override void SetScore(int individual, double _score) {
+            chromosomes[individual].score = _score;
+        }
+
         public void CrossOverChromosomes(int index1, int index2, int point1, int point2) {
             int tmppoint = point1;
             if (point1 > point2) {

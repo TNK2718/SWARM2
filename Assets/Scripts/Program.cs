@@ -52,7 +52,6 @@ public class Program : MonoBehaviour {
                 cellAutomataGA.NextGeneration();
                 Debug.Log("Episode" + i);
                 cellAutomataGA.ShowScores();
-                cellAutomataGA.ShowEliteScores();
             }
             isSimulating = true;
         });
