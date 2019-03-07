@@ -9,17 +9,15 @@ namespace GeneticAlgorithm {
         public int boardSize;
         public Board board1;
         public Board board2;
-        public int resource1;
-        public int resource2;
 
         enum GameState {
             INGAME, PLAYER1WIN, PLAYER2WIN
         }
 
-        public CellAutomataGame(int[] rules_in1, int[] rules_in2, int initBoardSize) {
+        public CellAutomataGame(int[] rules_in1, int[] rules_in2, int initBoardSize, int initialResource) {
             boardSize = initBoardSize;
-            board1 = new Board(rules_in1, boardSize);
-            board2 = new Board(rules_in2, boardSize);
+            board1 = new Board(rules_in1, boardSize, initialResource);
+            board2 = new Board(rules_in2, boardSize, initialResource);
         }
 
         public void UpdateGameBoard() {

@@ -17,6 +17,7 @@ namespace GeneticAlgorithm {
         private const double MUTATION_RANGE = 0.05;
         private const double STABILITY = 1;
         private const int EPISODES_FOR_EVALATION = 50;
+        private const int INITIAL_RESOURCES = 100;
         private int chromosomeMaxNumber;
         private int boardSize;
 
@@ -80,7 +81,7 @@ namespace GeneticAlgorithm {
         public void Evaluate() {
             for (int i = 0; i < POPULATION; i++) {
                 CellAutomataGame cellAutomataGame = new CellAutomataGame(
-                    intArrayChromosomes.ReadChromosomeAsRule(i), rulesForEvalate, boardSize);
+                    intArrayChromosomes.ReadChromosomeAsRule(i), rulesForEvalate, boardSize, INITIAL_RESOURCES);
                 cellAutomataGame.InitializeBoards();
                 for (int n = 0; n < EPISODES_FOR_EVALATION; n++) {
                     cellAutomataGame.UpdateGameBoard();

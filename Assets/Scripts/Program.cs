@@ -11,6 +11,7 @@ public class Program : MonoBehaviour {
     private bool isSimulating = false;
     private CellAutomataGA cellAutomataGA;
     private CellAutomataGame cellAutomataGame;
+    [SerializeField] private int INITIAL_RESOURCE;
 
     private readonly int NUM_LEARNING_ITERATION = 2;
     private readonly int BOARD_SIZE = 10;
@@ -64,7 +65,7 @@ public class Program : MonoBehaviour {
         }
         if (cellAutomataGame == null) {
             cellAutomataGame = new CellAutomataGame(
-                cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE);
+                cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE, INITIAL_RESOURCE);
 
             cellAutomataGame.InitializeBoards();
         }

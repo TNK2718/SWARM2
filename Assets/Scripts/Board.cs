@@ -9,7 +9,6 @@ namespace GeneticAlgorithm {
         private int BOARD_SIZE;
         public readonly int CELL_STATE_SIZE = 8;
         private readonly int NUM_MOORE_NEIGHBORHOOD = 9;
-        [SerializeField] private int INITIAL_RESOURCE;
         public int[,] board;
         private int[,] board_buffer;
         private int[] rules;
@@ -22,9 +21,9 @@ namespace GeneticAlgorithm {
         }
         public CellSpec[] CellSpecs { get; set; }
 
-        public Board(int[] rules_in, int boardsize) {
+        public Board(int[] rules_in, int boardsize, int initialResource) {
             BOARD_SIZE = boardsize;
-            Resource = INITIAL_RESOURCE;
+            Resource = initialResource;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
             CellSpecs = new CellSpec[CELL_STATE_SIZE];
