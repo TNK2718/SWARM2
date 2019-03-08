@@ -22,15 +22,15 @@ namespace Board {
                 if (value < 0) resource = 0;
             }
         }
-        public CellStatusType[] CellSpecs { get; set; }
+        public CellStatusType[] CellStatusType { get; set; }
 
         public CellGrid(int[] rules_in, int boardsize, int initialResource) {
             BOARD_SIZE = boardsize;
             Resource = initialResource;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
-            CellSpecs = new CellStatusType[CELL_STATE_SIZE];
-            for (int i = 0; i < CELL_STATE_SIZE; i++) CellSpecs[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
+            CellStatusType = new CellStatusType[CELL_STATE_SIZE];
+            for (int i = 0; i < CELL_STATE_SIZE; i++) CellStatusType[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -54,6 +54,7 @@ namespace Board {
             }
         }
 
+        // 位置(x, y)のセルの近傍のセルの状態を取得する
         public int GetConditionsNo(bool is_board, int x, int y) {
             int result = 0;
             for (int i = 0; i < NUM_MOORE_NEIGHBORHOOD; i++) {
@@ -62,6 +63,7 @@ namespace Board {
             return result;
         }
 
+        // CellGridを次のStepにアップデートする
         public void UpdateBoard() {
             Array.Copy(board, board_buffer, BOARD_SIZE * BOARD_SIZE);
             for (int x = 0; x < BOARD_SIZE; x++) {
@@ -77,19 +79,21 @@ namespace Board {
                         if (rule >= 0) break;
                     }
                     if (rule >= 0 && rule % FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD) != 0
-                        && Resource >= CellSpecs[rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)].Cost) {
+                        && Resource >= CellStatusType[rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)].Cost) {
                         SetCell(false, x, y, rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD));
-                        ConsumeResuorce(GetCell(true, x, y), GetCell(false, x, y), CellSpecs);
+                        ConsumeResuorce(GetCell(true, x, y), GetCell(false, x, y), CellStatusType);
                     }
                 }
             }
             Array.Copy(board_buffer, board, BOARD_SIZE * BOARD_SIZE);
         }
 
+        // リソースを消費する処理
         public void ConsumeResuorce(int preState, int nextState, CellStatusType[] _cellSpecs) {
             Resource -= _cellSpecs[nextState].Cost - _cellSpecs[preState].Cost;
         }
 
+        // int型の累乗計算用メソッド
         public int FastPower(int number, int power) {
             if (power == 0) return 1;
             else if (power == 1) return number;
@@ -102,6 +106,7 @@ namespace Board {
             }
         }
 
+        // 使わない
         public void Draw() {
             for (int y = 0; y < BOARD_SIZE; y++) {
                 for (int x = 0; x < BOARD_SIZE; x++) {
@@ -112,6 +117,7 @@ namespace Board {
             Console.WriteLine();
         }
 
+        // すべてのセルを状態0にする
         public void ClearBoard() {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {

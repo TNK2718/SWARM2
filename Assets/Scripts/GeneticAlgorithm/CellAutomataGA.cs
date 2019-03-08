@@ -42,6 +42,7 @@ namespace GeneticAlgorithm {
             };
         }
 
+        // 染色体を初期状態にセットする
         public void SetUpChromosomes() {
             System.Random random = new System.Random();
             for (int i = 0; i < POPULATION; i++) {
@@ -56,6 +57,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // 次の世代に以上する処理
         public void NextGeneration() {
             Evaluate();
             Crossover(intArrayChromosomes, CROSSOVER_RATE);
@@ -63,6 +65,7 @@ namespace GeneticAlgorithm {
             Reproduce_Ranking(intArrayChromosomes);
         }
 
+        // 交叉
         public void Crossover(IntArrayChromosomes intChromosomes, double crossoverrate) {
             System.Random random = new System.Random();
             for (int i = 0; i < POPULATION - 1; i++) {
@@ -75,6 +78,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // 評価をする
         public void Evaluate() {
             for (int i = 0; i < POPULATION; i++) {
                 CellAutomataGame cellAutomataGame = new CellAutomataGame(
@@ -87,6 +91,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // 評価関数
         private double EvaluateFunction(CellAutomataGame cellAutomataGame) {
             double score1 = 0;
             double score2 = 0;
@@ -99,6 +104,7 @@ namespace GeneticAlgorithm {
             return Math.Abs(score1 / Math.Pow(cellAutomataGame.boardSize, 2) / score2);
         }
 
+        // 突然変異
         public void Mutation(IntArrayChromosomes intChromosomes, double mutationrate, int chromosomeMaxNumber) {
             System.Random random = new System.Random();
             for (int i = 0; i < POPULATION; i++) {
@@ -111,6 +117,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // 選択・淘汰
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes) {
             _intArrayChromosomes.SortChromosomes();
             while (_intArrayChromosomes.GetPopulation() > POPULATION) {
@@ -118,6 +125,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // int型の累乗計算
         public int FastPower(int _base, int exponent) {
             if (exponent == 0) return 1;
             else if (exponent == 1) return _base;
@@ -130,6 +138,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // セルの遷移命令をint型の数に変換する
         private int ConvertToConditionNo(int[] input) {
             int returnvalue = 0;
             for (int i = 0; i <= MOORE_NEIGHBORHOOD; i++) {
@@ -138,6 +147,7 @@ namespace GeneticAlgorithm {
             return returnvalue;
         }
 
+        // Scoreをデバッグに表示
         public void ShowScores() {
             Debug.Log("Scores:");
             for (int i = 0; i < POPULATION; i++) {
@@ -145,6 +155,7 @@ namespace GeneticAlgorithm {
             }
         }
 
+        // 最もスコアが高いルールを返す
         public int[] EliteRule() {
             return intArrayChromosomes.ReadChromosomeAsRule(0);
         }

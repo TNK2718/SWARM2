@@ -27,6 +27,7 @@ namespace Board {
             ApplyCollision();
         }
 
+        // 自分と相手のセルが重なっていた場合、どちらも状態0にする
         private void ApplyCollision() {
             for (int x = 0; x < boardSize; x++) {
                 for (int y = 0; y < boardSize; y++) {
@@ -38,6 +39,7 @@ namespace Board {
             }
         }
 
+        // セルの特殊機能（Function）の実装
         public void ApplyCellfunction() {
 
         }
@@ -49,6 +51,7 @@ namespace Board {
             enemyCellGrid.SetCell(true, boardSize - 1, boardSize - 1, 1);
         }
 
+        // 描画
         public void Draw(List<List<GameObject>> cellSprites) {
             for (int y = 0; y < boardSize; y++) {
                 for (int x = 0; x < boardSize; x++) {

@@ -46,6 +46,7 @@ public class Program : MonoBehaviour {
         return sprites;
     }
 
+    // 学習開始
     private void StartLearning() {
         cellAutomataGA = new CellAutomataGA(BOARD_SIZE);
 
