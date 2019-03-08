@@ -15,7 +15,7 @@ namespace Character {
         public int NanoMachineArts { get; set; }
         public int BaseAntiNanoMachine { get; set; }
         public int AntiNanoMachine { get; set; }
-        public PlayerStatus[] PlayerStatus { get; set; }
+        public Buff[] PlayerStatus { get; set; }
         public ActionStrategyBase ActionStrategyBase { get; set; }
     }
 }

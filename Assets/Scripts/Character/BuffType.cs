@@ -1,6 +1,6 @@
 namespace Character {
     // ƒvƒŒƒCƒ„[‚Ì“Áêó‘Ô‚Ìí—Ş
-    public enum PlayerStatusType {
+    public enum BuffType {
 
     }
 }
