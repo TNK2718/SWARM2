@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace GeneticAlgorithm {
-    class Board {
+namespace Board {
+    // セルはこのボードによって管理される。
+    // キャラクターは管理しない。
+    class CellGrid {
         private int BOARD_SIZE;
         public readonly int CELL_STATE_SIZE = 8;
         private readonly int NUM_MOORE_NEIGHBORHOOD = 9;
@@ -20,15 +22,15 @@ namespace GeneticAlgorithm {
                 if (value < 0) resource = 0;
             }
         }
-        public CellSpec[] CellSpecs { get; set; }
+        public CellStatusType[] CellSpecs { get; set; }
 
-        public Board(int[] rules_in, int boardsize, int initialResource) {
+        public CellGrid(int[] rules_in, int boardsize, int initialResource) {
             BOARD_SIZE = boardsize;
             Resource = initialResource;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
-            CellSpecs = new CellSpec[CELL_STATE_SIZE];
-            for (int i = 0; i < CELL_STATE_SIZE; i++) CellSpecs[i] = new CellSpec() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
+            CellSpecs = new CellStatusType[CELL_STATE_SIZE];
+            for (int i = 0; i < CELL_STATE_SIZE; i++) CellSpecs[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -84,7 +86,7 @@ namespace GeneticAlgorithm {
             Array.Copy(board_buffer, board, BOARD_SIZE * BOARD_SIZE);
         }
 
-        public void ConsumeResuorce(int preState, int nextState, CellSpec[] _cellSpecs) {
+        public void ConsumeResuorce(int preState, int nextState, CellStatusType[] _cellSpecs) {
             Resource -= _cellSpecs[nextState].Cost - _cellSpecs[preState].Cost;
         }
 
@@ -118,15 +120,5 @@ namespace GeneticAlgorithm {
                 }
             }
         }
-    }
-
-    class CellSpec {
-        public int Armor { get; set; }
-        public int Cost { get; set; }
-        public CellFunction CellFunction { get; set; }
-    }
-
-    public enum CellFunction {
-        Normal, Eater, Turret
     }
 }

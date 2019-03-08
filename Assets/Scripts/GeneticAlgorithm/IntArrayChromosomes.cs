@@ -6,6 +6,7 @@ using System.Text;
 using System;
 
 namespace GeneticAlgorithm {
+    // リストでのChromosomeの集合の実装
     public class IntArrayChromosomes : ChromosomesBase<int> {
         private int chrmosomesize;
 

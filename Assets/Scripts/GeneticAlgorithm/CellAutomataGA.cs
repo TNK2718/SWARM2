@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Board;
 
 namespace GeneticAlgorithm {
+    // 遺伝的アルゴリズムの実装。
+    // このクラスのメソッドを呼び出すことで、学習させる。
     public class CellAutomataGA {
         private const int POPULATION = 100;
         private const int CHROMOSOME_SIZE = 2000;
@@ -89,8 +92,8 @@ namespace GeneticAlgorithm {
             double score2 = 0;
             for (int x = 0; x < cellAutomataGame.boardSize; x++) {
                 for (int y = 0; y < cellAutomataGame.boardSize; y++) {
-                    if (cellAutomataGame.board1.GetCell(true, x, y) != 0) score1++;
-                    score2 += cellAutomataGame.board2.GetCell(true, x, y);
+                    if (cellAutomataGame.myCellGrid.GetCell(true, x, y) != 0) score1++;
+                    score2 += cellAutomataGame.enemyCellGrid.GetCell(true, x, y);
                 }
             }
             return Math.Abs(score1 / Math.Pow(cellAutomataGame.boardSize, 2) / score2);

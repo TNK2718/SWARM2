@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GeneticAlgorithm;
+using Board;
 
 public class Program : MonoBehaviour {
     public GameObject star;
@@ -16,12 +17,13 @@ public class Program : MonoBehaviour {
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 10;
 
+    // ゲームのエントリーポイント
     void Start() {
-        cellSprites = initGameObjects();
+        cellSprites = initUnityGameObjects();
         StartLearning();
     }
 
-    private List<List<GameObject>> initGameObjects() {
+    private List<List<GameObject>> initUnityGameObjects() {
         // カメラ設定
         var camera = GetComponent<Camera>();
         camera.orthographicSize = 15;
@@ -60,6 +62,7 @@ public class Program : MonoBehaviour {
 
     void Update() {
         if (!isSimulating) {
+            // 学習が終わるまではシミュレーションを開始しない
             return;
         }
         if (cellAutomataGame == null) {
