@@ -13,7 +13,7 @@ public class Program : MonoBehaviour {
     private CellAutomataGame cellAutomataGame;
     [SerializeField] private int INITIAL_RESOURCE;
 
-    private readonly int NUM_LEARNING_ITERATION = 2;
+    private readonly int NUM_LEARNING_ITERATION = 10;
     private readonly int BOARD_SIZE = 10;
 
     void Start() {

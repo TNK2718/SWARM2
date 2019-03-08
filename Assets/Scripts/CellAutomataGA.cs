@@ -136,9 +136,9 @@ namespace GeneticAlgorithm {
         }
 
         public void ShowScores() {
-            Console.WriteLine("Scores:");
+            Debug.Log("Scores:");
             for (int i = 0; i < POPULATION; i++) {
-                Console.WriteLine(intArrayChromosomes.ReadScore(i));
+                Debug.Log(intArrayChromosomes.ReadScore(i));
             }
         }
 
