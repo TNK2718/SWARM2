@@ -1,5 +1,5 @@
 ﻿namespace Character {
-    // スキルを発動してない状態を表す。スキル発動の準備時はSkillStrategyに移行
+    // 操作を受け付けない状態
     public class FreezeStrategy : ActionStrategyBase {
         public override void ReceiveInput() {
             throw new System.NotImplementedException();

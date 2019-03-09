@@ -35,17 +35,36 @@ namespace Character {
         // バフの処理
         public void ProcessBuffs() {
             foreach(Buff buff in Buffs) {
-                if (buff.Duration == 0) Buffs.Remove(buff);
-                else buff.Duration -= Time.deltaTime;
+                if (buff.Duration == 0) {
+                    //
+                    // バフが切れる際の処理
+                    //
+                    Buffs.Remove(buff);
+                } else buff.Duration -= Time.deltaTime;
+                //
+                // 各バフ毎の処理
+                //
             }
         }
 
-        // カーソルで指定した点まで秒速speedで移動する（毎フレーム呼び出す）
+        // Destinationまで秒速speedで移動する（毎フレーム呼び出す）
         public void MoveToDestination(float speed) {
-
+            Vector2 position = gameObject.transform.position;
+            Vector2 differrence = new Vector2();
+            differrence = Destination - position;
+            if (differrence.magnitude <= speed) transform.position = Destination;
+            else {
+                position += speed * differrence.normalized;
+                transform.position = position;
+            }
         }
 
-        // プレイヤーの状態の変更
+        // CurretStrategyからクリックされた位置を取得し、Destinationを更新する
+        public void UpdateDestination() {
+            Destination = CurretStrategy.ClickedPoint;
+        }
+
+        // プレイヤーの状態を変更するメソッドたち
         public void SetWait() {
             CurretStrategy = waitStrategy;
         }
