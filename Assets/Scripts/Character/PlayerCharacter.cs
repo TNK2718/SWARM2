@@ -10,6 +10,7 @@ namespace Character {
         public int Hp { get; set; }
         public int BaseAtk { get; set; }
         public int Atk { get; set; }
+        public int BaseArmor { get; set; }
         public int Armor { get; set; }
         public float BaseSpeed { get; set; }
         public float Speed { get; set; }
