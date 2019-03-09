@@ -8,6 +8,7 @@ using Board;
 
 public class Program : MonoBehaviour {
     public GameObject star;
+    public Texture2D buttonTextrue;
     private List<List<GameObject>> cellSprites;
     private bool isSimulating = false;
     private CellAutomataGA cellAutomataGA;
@@ -19,6 +20,9 @@ public class Program : MonoBehaviour {
 
     // ゲームのエントリーポイント
     void Start() {
+        // DEBUG
+        new UI.UIButton("SampleButton", new Rect(0, 0, 100, 100), buttonTextrue);
+        return;  // DEBUG
         cellSprites = initUnityGameObjects();
         StartLearning();
     }
@@ -62,6 +66,7 @@ public class Program : MonoBehaviour {
     }
 
     void Update() {
+        return;  // DEBUG
         if (!isSimulating) {
             // 学習が終わるまではシミュレーションを開始しない
             return;

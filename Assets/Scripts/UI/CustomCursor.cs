@@ -32,7 +32,7 @@ namespace UI {
 
             Cursor.visible = false;  // マウスが画面外に出るとvisibleがtrueになるため毎フレームセット
             var newCursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            newCursorPos.z = 10f;
+            newCursorPos.z = 1f;
             cursorSprite.transform.position = newCursorPos;
 
             // 回転させる
