@@ -21,7 +21,8 @@ namespace Character {
         public int AntiNanoMachine { get; set; }
         public List<Buff> Buffs { get; set; }
         public Vector2 Destination { get; set; }
-        public ActionStrategyBase CurretStrategy { get; set; }
+        public int CurrentSkillId { get; set; }
+        public ActionStrategyBase CurrentStrategy { get; set; } // プレイヤーの状態を管理する
         private WaitStrategy waitStrategy;
         private SkillStrategy skillStrategy;
         private DeadStrategy deadStrategy;
@@ -49,6 +50,7 @@ namespace Character {
 
         // Destinationまで秒速speedで移動する（毎フレーム呼び出す）
         public void MoveToDestination(float speed) {
+            if (Destination == null) return;
             Vector2 position = gameObject.transform.position;
             Vector2 differrence = new Vector2();
             differrence = Destination - position;
@@ -59,26 +61,26 @@ namespace Character {
             }
         }
 
-        // CurretStrategyからクリックされた位置を取得し、Destinationを更新する
-        public void UpdateDestination() {
-            Destination = CurretStrategy.ClickedPoint;
+        // スキルの処理
+        public void UseSkill(Vector2 targetPosition) {
+
         }
 
         // プレイヤーの状態を変更するメソッドたち
         public void SetWait() {
-            CurretStrategy = waitStrategy;
+            CurrentStrategy = waitStrategy;
         }
 
         public void SetSkill() {
-            CurretStrategy = skillStrategy;
+            CurrentStrategy = skillStrategy;
         }
 
         public void SetDead() {
-            CurretStrategy = deadStrategy;
+            CurrentStrategy = deadStrategy;
         }
 
         public void SetFreeze() {
-            CurretStrategy = freezeStrategy;
+            CurrentStrategy = freezeStrategy;
         }
 
         private void Start() {
@@ -86,11 +88,12 @@ namespace Character {
             skillStrategy = GetComponent<SkillStrategy>();
             deadStrategy = GetComponent<DeadStrategy>();
             freezeStrategy = GetComponent<FreezeStrategy>();
-            CurretStrategy = waitStrategy;
+            CurrentStrategy = waitStrategy;
         }
 
         private void Update() {
             ProcessBuffs();
+            CurrentStrategy.ReceiveInput();
             MoveToDestination(Speed);
         }
     }

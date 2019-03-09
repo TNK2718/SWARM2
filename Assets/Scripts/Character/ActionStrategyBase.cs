@@ -3,7 +3,11 @@ using UnityEngine;
 namespace Character {
     // プレイヤーキャラクターの状態（待機中か、スキルを発動しようとしているかなど）を表す抽象クラス
     public abstract class ActionStrategyBase : MonoBehaviour{
-        public Vector2 ClickedPoint { get; set; }
+        protected PlayerCharacter playerCharacter;
         public abstract void ReceiveInput();
+
+        private void Start() {
+            playerCharacter = GetComponent<PlayerCharacter>();
+        }
     }
 }
