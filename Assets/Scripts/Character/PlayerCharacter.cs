@@ -19,6 +19,7 @@ namespace Character {
         public int NanoMachineArts { get; set; }
         public int BaseAntiNanoMachine { get; set; }
         public int AntiNanoMachine { get; set; }
+        public List<int> SkillList { get; set; }
         public List<Buff> Buffs { get; set; }
         public Vector2 Destination { get; set; }
         public int CurrentSkillId { get; set; }
