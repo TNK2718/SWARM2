@@ -23,12 +23,15 @@ namespace Character {
         public List<int> SkillList { get; set; }
         public List<Buff> Buffs { get; set; }
         public Vector2 Destination { get; set; }
-        public int CurrentSkillId { get; set; }
+        public int CurrentSkillId { get; set; } // 現在使用しようとしてるスキル
         public ActionStrategyBase CurrentStrategy { get; set; } // プレイヤーの状態を管理する
         private WaitStrategy waitStrategy;
         private SkillStrategy skillStrategy;
         private DeadStrategy deadStrategy;
         private FreezeStrategy freezeStrategy;
+        private DataBase.SkillDataLoader skillDataLoader;
+        private DataBase.CharacterDataLoader characterDataLoader;
+        [SerializeField] private Board.CellGrid cellGrid;
 
         // バフ追加
         public void AddBuff(Buff buff) {
@@ -65,7 +68,14 @@ namespace Character {
 
         // スキルの処理
         public void UseSkill(Vector2 targetPosition) {
-
+            switch (skillDataLoader.skillDataFormats[CurrentSkillId].SkillType) {
+                case DataBase.SkillType.Beam:
+                    break;
+                case DataBase.SkillType.Bomb:
+                    break;
+                case DataBase.SkillType.Construction:
+                    break;               
+            }
         }
 
         // プレイヤーの状態を変更するメソッドたち
@@ -91,6 +101,8 @@ namespace Character {
             deadStrategy = GetComponent<DeadStrategy>();
             freezeStrategy = GetComponent<FreezeStrategy>();
             CurrentStrategy = waitStrategy;
+            skillDataLoader = new DataBase.SkillDataLoader();
+            characterDataLoader = new DataBase.CharacterDataLoader();
         }
 
         private void Update() {

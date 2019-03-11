@@ -1,5 +1,5 @@
 ﻿namespace DataBase {
-    enum SkillType {
+    public enum SkillType {
         Bomb, Beam, Construction
     }
 }

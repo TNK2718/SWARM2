@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataBase {
-    enum AreaType {
+    public enum AreaType {
 
     }
 }

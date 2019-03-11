@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataBase {
-    class SkillDataFormat {
+    public class SkillDataFormat {
         public int Id;
         public SkillType SkillType;
         public AreaType AreaType;
