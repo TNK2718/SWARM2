@@ -45,6 +45,7 @@ namespace Visual {
                         groundSprites[y][x].GetComponent<ImageList>().changeImage(2);
                     }
                     // 黒いブロックを生成
+                    // TODO: 「もぞもぞ動く」
                     if (Time.frameCount % 4 == 0 && (myBoardData[y][x] || enemyBoardData[y][x])) {
                         var newBlackCube = Instantiate(
                             blackCube,

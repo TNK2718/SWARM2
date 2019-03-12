@@ -21,9 +21,10 @@ public class Program : MonoBehaviour {
     [SerializeField] private int INITIAL_RESOURCE;
     private CellGridView cellGridView;
     private CharacterView characterView;
+    private Vector2 prevFrameMousePosition;
 
     private readonly int NUM_LEARNING_ITERATION = 1;
-    private readonly int BOARD_SIZE = 10;
+    private readonly int BOARD_SIZE = 20;
     private readonly int BOARD_UPDATE_INTERVAL = 30;
 
     // ゲームのエントリーポイント
@@ -41,6 +42,7 @@ public class Program : MonoBehaviour {
 
         Application.targetFrameRate = 30;
         Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
+        prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         initUnityGameObjects();
         StartLearning();
     }
@@ -68,6 +70,8 @@ public class Program : MonoBehaviour {
         if (Physics.Raycast(ray, out mouseHovered, 300f)) {
             sphere.SetActive(true);
             sphere.transform.position = mouseHovered.transform.position + new Vector3(0, 0, -0.1f);
+            // クリックで移動
+            // TODO: 操作方法を決める（移動可能な範囲が光って表示される感じにする？）
             if (Input.GetMouseButtonDown(0)) {
                 var pos = cellGridView.getPositionOf(mouseHovered.transform.gameObject);
                 if (pos.found) {
@@ -77,6 +81,15 @@ public class Program : MonoBehaviour {
         } else {
             sphere.SetActive(false);
         }
+
+        // ドラッグで画面スクロール
+        if (Input.GetMouseButton(0)) {
+            Camera.main.transform.position += new Vector3(
+                Input.mousePosition.x - prevFrameMousePosition.x,
+                Input.mousePosition.y - prevFrameMousePosition.y,
+                0) * 0.03f;
+        }
+        prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
     }
 
     private void initUnityGameObjects() {
