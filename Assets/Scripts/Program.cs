@@ -12,6 +12,7 @@ public class Program : MonoBehaviour {
     public Texture2D textureBase;
     public GameObject blackCube;
     public GameObject character;
+    public GameObject sphere;
 
     private List<List<GameObject>> cellSprites;
     private bool isSimulating = false;
@@ -37,9 +38,41 @@ public class Program : MonoBehaviour {
             Debug.Log("Clicked!");
         });
 
-        Physics.gravity = new Vector3(0, 0, 3f);  // 重力小さめ
+        Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
         initUnityGameObjects();
         StartLearning();
+    }
+
+    void Update() {
+        if (!isSimulating) {
+            // 学習が終わるまではシミュレーションを開始しない
+            return;
+        }
+        if (cellAutomataGame == null) {
+            cellAutomataGame = new CellAutomataGame(
+                cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE, INITIAL_RESOURCE);
+
+            cellAutomataGame.InitializeBoards();
+        }
+
+        cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
+        cellAutomataGame.UpdateGameBoard();
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        var mouseHovered = new RaycastHit();
+        if (Physics.Raycast(ray, out mouseHovered, 300f)) {
+            sphere.SetActive(true);
+            sphere.transform.position = mouseHovered.transform.position + new Vector3(0, 0, -0.1f);
+            if (Input.GetMouseButtonDown(0)) {
+                var pos = cellGridView.getPositionOf(mouseHovered.transform.gameObject);
+                if (pos.found) {
+                    characterView.setPosition(pos.x, pos.y);
+                }
+            }
+        } else {
+            sphere.SetActive(false);
+        }
     }
 
     private void initUnityGameObjects() {
@@ -70,32 +103,5 @@ public class Program : MonoBehaviour {
             isSimulating = true;
         });
         Debug.Log("start!");
-    }
-
-    void Update() {
-        if (!isSimulating) {
-            // 学習が終わるまではシミュレーションを開始しない
-            return;
-        }
-        if (cellAutomataGame == null) {
-            cellAutomataGame = new CellAutomataGame(
-                cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE, INITIAL_RESOURCE);
-
-            cellAutomataGame.InitializeBoards();
-        }
-
-        cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
-        cellAutomataGame.UpdateGameBoard();
-
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        var mouseHovered = new RaycastHit();
-        if (Physics.Raycast(ray, out mouseHovered, 300f)) {
-            Debug.Log("RAYCAST  OK");
-            // mouseHovered.collider.gameObject.GetComponent<SpriteRenderer>()
-            //     .color = new Color(1f, 1f, 0, 0.5f);
-        }
-
-        
     }
 }

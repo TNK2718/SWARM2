@@ -26,8 +26,8 @@ namespace Visual {
             for (int y = 0; y < boardSize; y++) {
                 groundSprites.Add(new List<GameObject>());
                 for (int x = 0; x < boardSize; x++) {
-                    groundSprites[groundSprites.Count - 1].Add(
-                        Instantiate(star, boardPosTo3DPos(boardSize, x, y), Quaternion.identity));
+                    var sprite = Instantiate(star, boardPosTo3DPos(boardSize, x, y), Quaternion.identity);
+                    groundSprites[groundSprites.Count - 1].Add(sprite);
                 }
             }
         }
@@ -45,19 +45,30 @@ namespace Visual {
                         groundSprites[y][x].GetComponent<ImageList>().changeImage(2);
                     }
                     // 黒いブロックを生成
-                    if (myBoardData[y][x] || enemyBoardData[y][x]) {
+                    if (Time.frameCount % 4 == 0 && (myBoardData[y][x] || enemyBoardData[y][x])) {
                         var newBlackCube = Instantiate(
                             blackCube,
                             boardPosTo3DPos(boardSize, x, y) + new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f), -1),
                             Quaternion.identity);
                         newBlackCube.GetComponent<Rigidbody>().AddForce(new Vector3(
-                            UnityEngine.Random.Range(-1f, 1f),
-                            UnityEngine.Random.Range(-1f, 1f),
-                            -2f), ForceMode.Impulse);
-                        newBlackCube.AddComponent<LifeTime>().lifeTime = 50;
+                            UnityEngine.Random.Range(-0.4f, 0.4f),
+                            UnityEngine.Random.Range(-0.4f, 0.4f),
+                            -1.3f), ForceMode.Impulse);
+                        newBlackCube.AddComponent<LifeTime>().lifeTime = 120;
                     }
                 }
             }
+        }
+
+        public (bool found, int x, int y) getPositionOf(GameObject cell) {
+            for (int y = 0; y < boardSize; y++) {
+                for (int x = 0; x < boardSize; x++) {
+                    if (groundSprites[y][x] == cell) {
+                        return (true, x, y);
+                    }
+                }
+            }
+            return (false, 0, 0);
         }
     }
 }
