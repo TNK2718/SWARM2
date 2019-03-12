@@ -51,23 +51,28 @@ namespace Board {
             enemyCellGrid.SetCell(true, boardSize - 1, boardSize - 1, 1);
         }
 
-        // 描画
-        public void Draw(List<List<GameObject>> cellSprites) {
+        public List<List<Boolean>> getMyBoardData() {
+            var data = new List<List<Boolean>>();
             for (int y = 0; y < boardSize; y++) {
+                var row = new List<Boolean>();
                 for (int x = 0; x < boardSize; x++) {
-                    if (myCellGrid.GetCell(true, x, y) != 0) {
-                        cellSprites[y][x].SetActive(true);
-                        cellSprites[y][x].GetComponent<ImageList>().changeImage(0);
-                    } else if (enemyCellGrid.GetCell(true, x, y) != 0) {
-                        cellSprites[y][x].SetActive(true);  // TODO: キャラで色を変える
-                        cellSprites[y][x].GetComponent<ImageList>().changeImage(1);
-                    } else {
-                        cellSprites[y][x].SetActive(false);
-                    }
+                    row.Add(myCellGrid.GetCell(true, x, y) != 0);
                 }
-                Console.WriteLine();
+                data.Add(row);
             }
-            Console.WriteLine();
+            return data;
+        }
+
+        public List<List<Boolean>> getEnemyBoardData() {
+            var data = new List<List<Boolean>>();
+            for (int y = 0; y < boardSize; y++) {
+                var row = new List<Boolean>();
+                for (int x = 0; x < boardSize; x++) {
+                    row.Add(enemyCellGrid.GetCell(true, x, y) != 0);
+                }
+                data.Add(row);
+            }
+            return data;
         }
     }
 }
