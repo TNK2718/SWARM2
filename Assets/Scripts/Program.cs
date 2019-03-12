@@ -35,7 +35,7 @@ public class Program : MonoBehaviour {
             Debug.Log("Clicked!");
         });
 
-        Physics.gravity = new Vector3(0, 0, 9.8f);
+        Physics.gravity = new Vector3(0, 0, 3f);  // 重力小さめ
         initUnityGameObjects();
         StartLearning();
     }
@@ -44,8 +44,9 @@ public class Program : MonoBehaviour {
         // カメラ設定
         var camera = GetComponent<Camera>();
         // camera.orthographicSize = 15;
-        transform.position = new Vector3(14, -14, -10);
-        transform.localRotation = Quaternion.LookRotation(Vector3.zero - transform.position, new Vector3(0, 0, -1));
+        transform.position = new Vector3(16, -16, -8);
+        transform.localRotation = Quaternion.LookRotation(
+            new Vector3(0, 0, 9) - transform.position, new Vector3(0, 0, -1));
 
         cellGridView = new CellGridView(Instantiate, BOARD_SIZE, blackCube, star);
 

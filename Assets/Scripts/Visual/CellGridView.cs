@@ -31,22 +31,17 @@ namespace Visual {
         public void update(List<List<bool>> myBoardData, List<List<bool>> enemyBoardData) {
             for (int y = 0; y < myBoardData.Count; y++) {
                 for (int x = 0; x < myBoardData[0].Count; x++) {
+                    // 地面を描画
                     groundSprites[y][x].SetActive(true);
                     if (myBoardData[y][x]) {
-                        groundSprites[y][x].SetActive(true);
                         groundSprites[y][x].GetComponent<ImageList>().changeImage(0);
-                        var newBlackCube = Instantiate(
-                            blackCube,
-                            boardPosTo3DPos(x, y) + new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f), -1),
-                            Quaternion.identity);
-                        newBlackCube.GetComponent<Rigidbody>().AddForce(new Vector3(
-                            UnityEngine.Random.Range(-1f, 1f),
-                            UnityEngine.Random.Range(-1f, 1f),
-                            -2f), ForceMode.Impulse);
-                        newBlackCube.AddComponent<LifeTime>().lifeTime = 60;
                     } else if (enemyBoardData[y][x]) {
-                        groundSprites[y][x].SetActive(true);
                         groundSprites[y][x].GetComponent<ImageList>().changeImage(1);
+                    } else {
+                        groundSprites[y][x].GetComponent<ImageList>().changeImage(2);
+                    }
+                    // 黒いブロックを生成
+                    if (myBoardData[y][x] || enemyBoardData[y][x]) {
                         var newBlackCube = Instantiate(
                             blackCube,
                             boardPosTo3DPos(x, y) + new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f), -1),
@@ -55,9 +50,7 @@ namespace Visual {
                             UnityEngine.Random.Range(-1f, 1f),
                             UnityEngine.Random.Range(-1f, 1f),
                             -2f), ForceMode.Impulse);
-                        newBlackCube.AddComponent<LifeTime>().lifeTime = 60;
-                    } else {
-                        groundSprites[y][x].SetActive(false);
+                        newBlackCube.AddComponent<LifeTime>().lifeTime = 50;
                     }
                 }
             }
