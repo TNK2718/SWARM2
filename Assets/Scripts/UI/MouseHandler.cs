@@ -17,8 +17,6 @@ namespace UI {
         private List<Action> whilePointerUpListeners = new List<Action>();
         private List<Action> whilePointerInsideListeners = new List<Action>();
         private List<Action> whilePointerOutsideListeners = new List<Action>();
-        
-
 
         public void Update() {
             var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
