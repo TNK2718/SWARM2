@@ -8,6 +8,10 @@ namespace Visual {
 
     // ゲームのボードの描画を行うクラス
     public class CellGridView {
+        public static Vector3 boardPosTo3DPos(int boardSize, int x, int y) {
+            return new Vector3(-boardSize + 2 * x, -boardSize + 2 * y, 10);
+        }
+    
         private GameObject blackCube;
         private List<List<GameObject>> groundSprites;
         private InstantiateType Instantiate;
@@ -23,7 +27,7 @@ namespace Visual {
                 groundSprites.Add(new List<GameObject>());
                 for (int x = 0; x < boardSize; x++) {
                     groundSprites[groundSprites.Count - 1].Add(
-                        Instantiate(star, boardPosTo3DPos(x, y), Quaternion.identity));
+                        Instantiate(star, boardPosTo3DPos(boardSize, x, y), Quaternion.identity));
                 }
             }
         }
@@ -44,7 +48,7 @@ namespace Visual {
                     if (myBoardData[y][x] || enemyBoardData[y][x]) {
                         var newBlackCube = Instantiate(
                             blackCube,
-                            boardPosTo3DPos(x, y) + new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f), -1),
+                            boardPosTo3DPos(boardSize, x, y) + new Vector3(UnityEngine.Random.Range(-0.3f, 0.3f), UnityEngine.Random.Range(-0.3f, 0.3f), -1),
                             Quaternion.identity);
                         newBlackCube.GetComponent<Rigidbody>().AddForce(new Vector3(
                             UnityEngine.Random.Range(-1f, 1f),
@@ -54,10 +58,6 @@ namespace Visual {
                     }
                 }
             }
-        }
-
-        private Vector3 boardPosTo3DPos(int x, int y) {
-            return new Vector3(-boardSize + 2 * x, -boardSize + 2 * y, 10);
         }
     }
 }

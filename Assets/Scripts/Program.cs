@@ -11,6 +11,7 @@ public class Program : MonoBehaviour {
     public GameObject star;
     public Texture2D textureBase;
     public GameObject blackCube;
+    public GameObject character;
 
     private List<List<GameObject>> cellSprites;
     private bool isSimulating = false;
@@ -18,6 +19,7 @@ public class Program : MonoBehaviour {
     private CellAutomataGame cellAutomataGame;
     [SerializeField] private int INITIAL_RESOURCE;
     private CellGridView cellGridView;
+    private CharacterView characterView;
 
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 10;
@@ -49,6 +51,7 @@ public class Program : MonoBehaviour {
             new Vector3(0, 0, 9) - transform.position, new Vector3(0, 0, -1));
 
         cellGridView = new CellGridView(Instantiate, BOARD_SIZE, blackCube, star);
+        characterView = new CharacterView(character, 0, 0, BOARD_SIZE);
 
         // 元画像を隠す
         star.SetActive(false);
