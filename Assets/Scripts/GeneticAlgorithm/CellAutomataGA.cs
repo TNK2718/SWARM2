@@ -149,9 +149,9 @@ namespace GeneticAlgorithm {
 
         // Scoreをデバッグに表示
         public void ShowScores() {
-            Debug.Log("Scores:");
+            // Debug.Log("Scores:");
             for (int i = 0; i < POPULATION; i++) {
-                Debug.Log(intArrayChromosomes.ReadScore(i));
+                // Debug.Log(intArrayChromosomes.ReadScore(i));
             }
         }
 

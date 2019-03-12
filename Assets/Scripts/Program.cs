@@ -5,16 +5,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeneticAlgorithm;
 using Board;
+using Visual;
 
 public class Program : MonoBehaviour {
     public GameObject star;
     public Texture2D textureBase;
+    public GameObject blackCube;
 
     private List<List<GameObject>> cellSprites;
     private bool isSimulating = false;
     private CellAutomataGA cellAutomataGA;
     private CellAutomataGame cellAutomataGame;
     [SerializeField] private int INITIAL_RESOURCE;
+    private CellGridView cellGridView;
 
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 10;
@@ -32,31 +35,22 @@ public class Program : MonoBehaviour {
             Debug.Log("Clicked!");
         });
 
-        cellSprites = initUnityGameObjects();
+        Physics.gravity = new Vector3(0, 0, 9.8f);
+        initUnityGameObjects();
         StartLearning();
     }
 
-    private List<List<GameObject>> initUnityGameObjects() {
+    private void initUnityGameObjects() {
         // カメラ設定
         var camera = GetComponent<Camera>();
-        camera.orthographicSize = 15;
-        camera.transform.position.Set(0, 0, 0);
+        // camera.orthographicSize = 15;
+        transform.position = new Vector3(14, -14, -10);
+        transform.localRotation = Quaternion.LookRotation(Vector3.zero - transform.position, new Vector3(0, 0, -1));
 
-        // Spriteを並べる
-        var sprites = new List<List<GameObject>>();
-        Debug.Log(star.transform.position.z);
-        for (float y = -BOARD_SIZE; y < BOARD_SIZE; y += 2) {
-            sprites.Add(new List<GameObject>());
-            for (float x = -BOARD_SIZE; x < BOARD_SIZE; x += 2) {
-                sprites[sprites.Count - 1].Add(
-                    Instantiate(star, new Vector3(x, y, 10), Quaternion.identity));
-            }
-        }
+        cellGridView = new CellGridView(Instantiate, BOARD_SIZE, blackCube, star);
 
         // 元画像を隠す
         star.SetActive(false);
-
-        return sprites;
     }
 
     // 学習開始
@@ -85,7 +79,19 @@ public class Program : MonoBehaviour {
 
             cellAutomataGame.InitializeBoards();
         }
-        cellAutomataGame.Draw(cellSprites);
+
+        cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
         cellAutomataGame.UpdateGameBoard();
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        var mouseHovered = new RaycastHit();
+        if (Physics.Raycast(ray, out mouseHovered, 300f)) {
+            Debug.Log("RAYCAST  OK");
+            // mouseHovered.collider.gameObject.GetComponent<SpriteRenderer>()
+            //     .color = new Color(1f, 1f, 0, 0.5f);
+        }
+
+        
     }
 }
