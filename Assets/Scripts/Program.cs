@@ -24,6 +24,7 @@ public class Program : MonoBehaviour {
 
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 10;
+    private readonly int BOARD_UPDATE_INTERVAL = 30;
 
     // ゲームのエントリーポイント
     void Start() {
@@ -38,6 +39,7 @@ public class Program : MonoBehaviour {
             Debug.Log("Clicked!");
         });
 
+        Application.targetFrameRate = 30;
         Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
         initUnityGameObjects();
         StartLearning();
@@ -55,8 +57,10 @@ public class Program : MonoBehaviour {
             cellAutomataGame.InitializeBoards();
         }
 
+        if (Time.frameCount % BOARD_UPDATE_INTERVAL == 0) {
+            cellAutomataGame.UpdateGameBoard();
+        }
         cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
-        cellAutomataGame.UpdateGameBoard();
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
