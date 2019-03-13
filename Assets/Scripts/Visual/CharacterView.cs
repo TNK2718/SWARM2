@@ -12,10 +12,10 @@ namespace Visual {
         public CharacterView(GameObject sprite, int x, int y, int boardSize) {
             this.sprite = sprite;
             this.boardSize = boardSize;
-            setPosition(x, y);
+            SetPosition(x, y);
         }
 
-        public void setPosition(int x, int y) {
+        public void SetPosition(int x, int y) {
             sprite.transform.position =
                 CellGridView.boardPosTo3DPos(boardSize, x, y) +
                 new Vector3(0, 0, -1);

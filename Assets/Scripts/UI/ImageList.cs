@@ -13,7 +13,7 @@ public class ImageList : MonoBehaviour {
     void Update() {
     }
 
-    public void changeImage(int index) {
+    public void ChangeImage(int index) {
         if (0 <= index && index < sprites.Count) {
             GetComponent<SpriteRenderer>().sprite = sprites[index];
         } else {

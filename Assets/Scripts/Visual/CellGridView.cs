@@ -32,17 +32,17 @@ namespace Visual {
             }
         }
 
-        public void update(List<List<bool>> myBoardData, List<List<bool>> enemyBoardData) {
+        public void Update(List<List<bool>> myBoardData, List<List<bool>> enemyBoardData) {
             for (int y = 0; y < myBoardData.Count; y++) {
                 for (int x = 0; x < myBoardData[0].Count; x++) {
                     // 地面を描画
                     groundSprites[y][x].SetActive(true);
                     if (myBoardData[y][x]) {
-                        groundSprites[y][x].GetComponent<ImageList>().changeImage(0);
+                        groundSprites[y][x].GetComponent<ImageList>().ChangeImage(0);
                     } else if (enemyBoardData[y][x]) {
-                        groundSprites[y][x].GetComponent<ImageList>().changeImage(1);
+                        groundSprites[y][x].GetComponent<ImageList>().ChangeImage(1);
                     } else {
-                        groundSprites[y][x].GetComponent<ImageList>().changeImage(2);
+                        groundSprites[y][x].GetComponent<ImageList>().ChangeImage(2);
                     }
                     // 黒いブロックを生成
                     // TODO: 「もぞもぞ動く」
@@ -61,16 +61,16 @@ namespace Visual {
             }
         }
 
-        public (bool found, int x, int y) getMouseHoveredCell() {
+        public (bool found, int x, int y) GetMouseHoveredCell() {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var mouseHovered = new RaycastHit();
             if (Physics.Raycast(ray, out mouseHovered, 300f)) {
-                return getPositionOf(mouseHovered.transform.gameObject);
+                return GetPositionOf(mouseHovered.transform.gameObject);
             }
             return (false, 0, 0);
         }
 
-        public (bool found, int x, int y) getPositionOf(GameObject cell) {
+        public (bool found, int x, int y) GetPositionOf(GameObject cell) {
             for (int y = 0; y < boardSize; y++) {
                 for (int x = 0; x < boardSize; x++) {
                     if (groundSprites[y][x] == cell) {

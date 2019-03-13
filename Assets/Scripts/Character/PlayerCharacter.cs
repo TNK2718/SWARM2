@@ -5,7 +5,6 @@ using System.Collections.Generic;
 namespace Character {
     public class CharacterData {
         public PlayerCharacterStatus Status = new PlayerCharacterStatus();
-        public List<int> SkillList = new List<int>();  // TODO: SkillListはStatusに含まれるべきか聞く
         public List<Buff> Buffs = new List<Buff>();
 
         // ボードのマスでの座標
@@ -20,7 +19,6 @@ namespace Character {
         private int Id;
         private bool Owned;  // この端末のプレイヤーかどうか
         private CharacterData characterData = new CharacterData();
-
         private ActionStrategyBase CurrentStrategy; // プレイヤーの状態を管理する
         private DataBase.SkillDataLoader skillDataLoader =
             new DataBase.SkillDataLoader();

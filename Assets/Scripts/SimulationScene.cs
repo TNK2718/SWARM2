@@ -49,7 +49,7 @@ public class SimulationScene : MonoBehaviour {
             cellAutomataGame.InitializeBoards();
         }
 
-        var mouseHoveredCell = cellGridView.getMouseHoveredCell();
+        var mouseHoveredCell = cellGridView.GetMouseHoveredCell();
         updateSelectionSphere(mouseHoveredCell);
         characterModel.Update(mouseHoveredCell);
         characterSprite.transform.position =
@@ -59,7 +59,7 @@ public class SimulationScene : MonoBehaviour {
         if (Time.frameCount % BOARD_UPDATE_INTERVAL == 0) {
             cellAutomataGame.UpdateGameBoard();
         }
-        cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
+        cellGridView.Update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
 
         // ドラッグで画面スクロール
         if (Input.GetMouseButton(0)) {
