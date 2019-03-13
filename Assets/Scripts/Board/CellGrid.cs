@@ -63,9 +63,19 @@ namespace Board {
             return result;
         }
 
+        //  BoardをBoardBufferにコピー
+        public void CopyToBoardBuffer() {
+            Array.Copy(board, board_buffer, BOARD_SIZE * BOARD_SIZE);
+        }
+
+        // BoardBufferをBoardにコピー
+        public void CopyToBoard() {
+            Array.Copy(board_buffer, board, BOARD_SIZE * BOARD_SIZE);
+        }
+
         // CellGridを次のStepにアップデートする
         public void UpdateBoard() {
-            Array.Copy(board, board_buffer, BOARD_SIZE * BOARD_SIZE);
+            CopyToBoardBuffer();
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     int rule = -1;
@@ -85,7 +95,7 @@ namespace Board {
                     }
                 }
             }
-            Array.Copy(board_buffer, board, BOARD_SIZE * BOARD_SIZE);
+            CopyToBoard();
         }
 
         // リソースを消費する処理
