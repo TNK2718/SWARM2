@@ -1,5 +1,5 @@
 namespace Character {
-    // ƒvƒŒƒCƒ„[‚Ì“Áêó‘Ô‚Ìí—Ş
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç‰¹æ®ŠçŠ¶æ…‹ã®ç¨®é¡
     public enum BuffType {
 
     }

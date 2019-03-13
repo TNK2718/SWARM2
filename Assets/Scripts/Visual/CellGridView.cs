@@ -8,7 +8,7 @@ namespace Visual {
 
     // ゲームのボードの描画を行うクラス
     public class CellGridView {
-        public static Vector3 boardPosTo3DPos(int boardSize, int x, int y) {
+        public static Vector3 boardPosTo3DPos(int boardSize, float x, float y) {
             return new Vector3(-boardSize + 2 * x, -boardSize + 2 * y, 10);
         }
     
@@ -59,6 +59,15 @@ namespace Visual {
                     }
                 }
             }
+        }
+
+        public (bool found, int x, int y) getMouseHoveredCell() {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var mouseHovered = new RaycastHit();
+            if (Physics.Raycast(ray, out mouseHovered, 300f)) {
+                return getPositionOf(mouseHovered.transform.gameObject);
+            }
+            return (false, 0, 0);
         }
 
         public (bool found, int x, int y) getPositionOf(GameObject cell) {
