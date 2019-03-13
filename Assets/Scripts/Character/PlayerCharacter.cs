@@ -37,8 +37,7 @@ namespace Character {
         public void Update((bool found, int x, int y) mouseHoveredCell) {
             ProcessBuffs();
             CurrentStrategy.Update(characterData, mouseHoveredCell);
-            // TODO
-            // MoveToDestination(Speed);
+            MoveToDestination(characterData.Status.Speed.currentValue);
         }
 
         public Vector2 GetPosition() {
@@ -67,16 +66,15 @@ namespace Character {
 
         // Destinationまで秒速speedで移動する（毎フレーム呼び出す）
         public void MoveToDestination(float speed) {
-            // TODO: 書き換え
-            // if (characterData.Destination == null) return;
-            // Vector2 position = gameObject.transform.position;
-            // Vector2 differrence = new Vector2();
-            // differrence = Destination - position;
-            // if (differrence.magnitude <= speed) transform.position = Destination;
-            // else {
-            //     position += speed * differrence.normalized;
-            //     transform.position = position;
-            // }
+            if (characterData.Position == characterData.Destination) {
+                return;
+            }
+            var differrence = characterData.Destination - characterData.Position;
+            if (differrence.magnitude <= speed) {
+                characterData.Position = characterData.Destination;
+            } else {
+                characterData.Position += speed * differrence.normalized;
+            }
         }
 
         // スキルの処理

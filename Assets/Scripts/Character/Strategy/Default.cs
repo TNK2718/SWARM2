@@ -15,9 +15,7 @@ namespace Character.Strategy {
                 (bool found, int x, int y) mouseHoveredCell) {
 
             if (mouseHoveredCell.found && Input.GetMouseButtonDown(0)) {
-                // TODO: Destinationに変える
-                characterData.Position =
-                    Visual.CellGridView.boardPosTo3DPos(boardSize, mouseHoveredCell.x, mouseHoveredCell.y);
+                characterData.Destination = new Vector2Int(mouseHoveredCell.x, mouseHoveredCell.y);
             }
 
             // TODO: これの実装

@@ -11,38 +11,28 @@ public class SimulationScene : MonoBehaviour {
     public GameObject star;
     public Texture2D textureBase;
     public GameObject blackCube;
-    public GameObject character;
+    public GameObject characterSprite;
     public GameObject sphere;
+    [SerializeField] private readonly int INITIAL_RESOURCE;
 
-    private List<List<GameObject>> cellSprites;
     private bool isSimulating = false;
     private CellAutomataGA cellAutomataGA;
     private CellAutomataGame cellAutomataGame;
-    [SerializeField] private int INITIAL_RESOURCE;
     private CellGridView cellGridView;
     private CharacterView characterView;
     private Vector2 prevFrameMousePosition;
+    private Character.PlayerCharacter characterModel;
 
     private readonly int NUM_LEARNING_ITERATION = 1;
-    private readonly int BOARD_SIZE = 20;
+    private readonly int BOARD_SIZE = 8;
     private readonly int BOARD_UPDATE_INTERVAL = 30;
 
     // ゲームのエントリーポイント
     void Start() {
-        // debug
-        new UI.UIButton("SampleButton", new Rect(10.5f, 10f, 6f, 2f), textureBase, () => {
-            Debug.Log("Clicked!");
-        });
-        new UI.UIButton("SampleButton", new Rect(10.5f, 7.9f, 6f, 2f), textureBase, () => {
-            Debug.Log("Clicked!");
-        });
-        new UI.UIButton("SampleButton", new Rect(10.5f, 5.8f, 6f, 2f), textureBase, () => {
-            Debug.Log("Clicked!");
-        });
-
         Application.targetFrameRate = 30;
         Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        characterModel = new Character.PlayerCharacter(BOARD_SIZE);
         initUnityGameObjects();
         StartLearning();
     }
@@ -59,28 +49,17 @@ public class SimulationScene : MonoBehaviour {
             cellAutomataGame.InitializeBoards();
         }
 
+        var mouseHoveredCell = cellGridView.getMouseHoveredCell();
+        updateSelectionSphere(mouseHoveredCell);
+        characterModel.Update(mouseHoveredCell);
+        characterSprite.transform.position =
+            CellGridView.boardPosTo3DPos(BOARD_SIZE, characterModel.GetPosition().x, characterModel.GetPosition().y) +
+            new Vector3(0, 0, -0.7f);
+
         if (Time.frameCount % BOARD_UPDATE_INTERVAL == 0) {
             cellAutomataGame.UpdateGameBoard();
         }
         cellGridView.update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
-
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        var mouseHovered = new RaycastHit();
-        if (Physics.Raycast(ray, out mouseHovered, 300f)) {
-            sphere.SetActive(true);
-            sphere.transform.position = mouseHovered.transform.position + new Vector3(0, 0, -0.1f);
-            // クリックで移動
-            // TODO: 操作方法を決める（移動可能な範囲が光って表示される感じにする？）
-            if (Input.GetMouseButtonDown(0)) {
-                var pos = cellGridView.getPositionOf(mouseHovered.transform.gameObject);
-                if (pos.found) {
-                    characterView.setPosition(pos.x, pos.y);
-                }
-            }
-        } else {
-            sphere.SetActive(false);
-        }
 
         // ドラッグで画面スクロール
         if (Input.GetMouseButton(0)) {
@@ -101,7 +80,7 @@ public class SimulationScene : MonoBehaviour {
             new Vector3(0, 0, 9) - transform.position, new Vector3(0, 0, -1));
 
         cellGridView = new CellGridView(Instantiate, BOARD_SIZE, blackCube, star);
-        characterView = new CharacterView(character, 0, 0, BOARD_SIZE);
+        characterView = new CharacterView(characterSprite, 0, 0, BOARD_SIZE);
 
         // 元画像を隠す
         star.SetActive(false);
@@ -120,5 +99,15 @@ public class SimulationScene : MonoBehaviour {
             isSimulating = true;
         });
         Debug.Log("start!");
+    }
+
+    private void updateSelectionSphere((bool found, int x, int y) mouseHoveredCell) {
+        if (mouseHoveredCell.found) {
+            sphere.SetActive(true);
+            sphere.transform.position = CellGridView.boardPosTo3DPos(
+                BOARD_SIZE, mouseHoveredCell.x, mouseHoveredCell.y) + new Vector3(0, 0, -0.2f);
+        } else {
+            sphere.SetActive(false);
+        }
     }
 }
