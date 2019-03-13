@@ -51,23 +51,23 @@ namespace UI {
             isMouseInsideLastFrame = isMouseInside;
         }
 
-        public void onPointerEnter(Action callback) {
+        public void OnPointerEnter(Action callback) {
             pointerEnterListeners.Add(callback); }
-        public void onPointerExit(Action callback) {
+        public void OnPointerExit(Action callback) {
             pointerExitListeners.Add(callback); }
-        public void onPointerDown(Action callback) {
+        public void OnPointerDown(Action callback) {
             pointerDownListeners.Add(callback); }
-        public void onPointerUp(Action callback) {
+        public void OnPointerUp(Action callback) {
             pointerUpListeners.Add(callback); }
-        public void onPointerClick(Action callback) {
+        public void OnPointerClick(Action callback) {
             pointerClickListeners.Add(callback); }
-        public void whilePointerDown(Action callback) {
+        public void WhilePointerDown(Action callback) {
             whilePointerDownListeners.Add(callback); }
-        public void whilePointerUp(Action callback) {
+        public void WhilePointerUp(Action callback) {
             whilePointerUpListeners.Add(callback); }
-        public void whilePointerInside(Action callback) {
+        public void WhilePointerInside(Action callback) {
             whilePointerInsideListeners.Add(callback); }
-        public void whilePointerOutside(Action callback) {
+        public void WhilePointerOutside(Action callback) {
             whilePointerOutsideListeners.Add(callback); }
     }
 }

@@ -33,7 +33,7 @@ public class SimulationScene : MonoBehaviour {
         Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         characterModel = new Character.PlayerCharacter(BOARD_SIZE);
-        initUnityGameObjects();
+        InitUnityGameObjects();
         StartLearning();
     }
 
@@ -50,7 +50,7 @@ public class SimulationScene : MonoBehaviour {
         }
 
         var mouseHoveredCell = cellGridView.GetMouseHoveredCell();
-        updateSelectionSphere(mouseHoveredCell);
+        UpdateSelectionSphere(mouseHoveredCell);
         characterModel.Update(mouseHoveredCell);
         characterSprite.transform.position =
             CellGridView.boardPosTo3DPos(BOARD_SIZE, characterModel.GetPosition().x, characterModel.GetPosition().y) +
@@ -71,7 +71,7 @@ public class SimulationScene : MonoBehaviour {
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
     }
 
-    private void initUnityGameObjects() {
+    private void InitUnityGameObjects() {
         // カメラ設定
         var camera = GetComponent<Camera>();
         // camera.orthographicSize = 15;
@@ -101,7 +101,7 @@ public class SimulationScene : MonoBehaviour {
         Debug.Log("start!");
     }
 
-    private void updateSelectionSphere((bool found, int x, int y) mouseHoveredCell) {
+    private void UpdateSelectionSphere((bool found, int x, int y) mouseHoveredCell) {
         if (mouseHoveredCell.found) {
             sphere.SetActive(true);
             sphere.transform.position = CellGridView.boardPosTo3DPos(
