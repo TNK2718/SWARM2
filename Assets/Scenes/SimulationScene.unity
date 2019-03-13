@@ -369,9 +369,8 @@ MonoBehaviour:
   star: {fileID: 1903744680}
   textureBase: {fileID: 2800000, guid: 502af28e67d868841a5c9fb0982dac40, type: 3}
   blackCube: {fileID: 841846369}
-  character: {fileID: 145637080}
+  characterSprite: {fileID: 145637080}
   sphere: {fileID: 2133327297}
-  INITIAL_RESOURCE: 100
 --- !u!1 &693376651
 GameObject:
   m_ObjectHideFlags: 0
