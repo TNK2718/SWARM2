@@ -13,7 +13,6 @@ public class SimulationScene : MonoBehaviour {
     public GameObject blackCube;
     public GameObject characterSprite;
     public GameObject sphere;
-    [SerializeField] private readonly int INITIAL_RESOURCE;
 
     private bool isSimulating = false;
     private CellAutomataGA cellAutomataGA;
@@ -26,6 +25,7 @@ public class SimulationScene : MonoBehaviour {
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 8;
     private readonly int BOARD_UPDATE_INTERVAL = 30;
+    private readonly int INITIAL_RESOURCE = 100;
 
     // ゲームのエントリーポイント
     void Start() {
