@@ -11,6 +11,7 @@ namespace GeneticAlgorithm {
     // このクラスのメソッドを呼び出すことで、学習させる。
     public class CellAutomataGA {
         private const int POPULATION = 100;
+        private const int ELITEPOPULATION = 1;
         private const int CHROMOSOME_SIZE = 2000;
         private const int MOORE_NEIGHBORHOOD = 9;
         private const int CELL_STATE_SIZE = 8;
@@ -120,8 +121,13 @@ namespace GeneticAlgorithm {
         // 選択・淘汰
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes) {
             _intArrayChromosomes.SortChromosomes();
+            var random = new System.Random();
             while (_intArrayChromosomes.GetPopulation() > POPULATION) {
-                _intArrayChromosomes.RemoveChromosome(_intArrayChromosomes.GetPopulation() - 1);
+                for(int i = ELITEPOPULATION; i < _intArrayChromosomes.GetPopulation(); i++) {
+                    if(random.Next() <= i / _intArrayChromosomes.GetPopulation()) {
+                        _intArrayChromosomes.RemoveChromosome(_intArrayChromosomes.GetPopulation() - 1);
+                    }
+                }
             }
         }
 

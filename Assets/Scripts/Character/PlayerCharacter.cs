@@ -83,7 +83,7 @@ namespace Character {
                 case DataBase.SkillType.Bomb:
                     break;
                 case DataBase.SkillType.Construction:
-                    break;               
+                    break;             
             }
         }
 
