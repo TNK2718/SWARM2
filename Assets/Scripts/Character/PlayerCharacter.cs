@@ -62,6 +62,11 @@ namespace Character {
             }
         }
 
+        // ダメージを受ける
+        public void TakeDamage(int power) {
+            // TODO : ダメージ計算式を考える(減算or除算or?)
+        }
+
         // Destinationまで秒速speedで移動する（毎フレーム呼び出す）
         public void MoveToDestination(float speed) {
             if (characterData.Position == characterData.Destination) {

@@ -88,6 +88,11 @@ namespace Board {
                     break;
                 case CellFunction.Turret:
                     // TODO : 最も優先度の高く近いセル/プレイヤーを攻撃
+                    if((AnotherPlayerChracter.GetPosition() - new Vector2(x, y)).magnitude >= CellStatusType.TURRETRANGE) {
+                        
+                    } else {
+                        AnotherPlayerChracter.TakeDamage(CellStatusType.TURRETPOWER);
+                    }
                     break;
             }
         }
