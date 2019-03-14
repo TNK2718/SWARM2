@@ -121,13 +121,14 @@ namespace GeneticAlgorithm {
         // 選択・淘汰
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes) {
             _intArrayChromosomes.SortChromosomes();
+            int population = _intArrayChromosomes.GetPopulation();
             var random = new System.Random();
-            while (_intArrayChromosomes.GetPopulation() > POPULATION) {
-                for(int i = ELITEPOPULATION; i < _intArrayChromosomes.GetPopulation(); i++) {
-                    if(random.Next() <= i / _intArrayChromosomes.GetPopulation()) {
-                        _intArrayChromosomes.RemoveChromosome(_intArrayChromosomes.GetPopulation() - 1);
-                    }
-                }
+            for(int i = 0; i < population - POPULATION; i++) {
+                int individual = 
+                    (int) (Math.Pow(3.0 * random.NextDouble(), 1.0 / 3.0) * _intArrayChromosomes.GetPopulation()); // 逆関数法
+                // TODO : 誤差の考察
+                if (individual >= _intArrayChromosomes.GetPopulation()) individual = _intArrayChromosomes.GetPopulation() - 1;
+                _intArrayChromosomes.RemoveChromosome(individual);
             }
         }
 

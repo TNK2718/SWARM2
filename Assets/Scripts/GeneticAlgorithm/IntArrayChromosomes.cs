@@ -8,10 +8,10 @@ using System;
 namespace GeneticAlgorithm {
     // リストでのChromosomeの集合の実装
     public class IntArrayChromosomes : ChromosomesBase<int> {
-        private int chrmosomesize;
+        private int chromosomesize;
 
         public IntArrayChromosomes(int population, int _chromosomesize, int chromosomeMaxNumber) {
-            chrmosomesize = _chromosomesize;
+            chromosomesize = _chromosomesize;
             chromosomes = new List<Chromosome<int>>();
             for (int i = 0; i < population; i++) {
                 chromosomes.Add(new Chromosome<int>(_chromosomesize));
@@ -62,7 +62,7 @@ namespace GeneticAlgorithm {
         }
 
         public override void AddChromosome(int[] _value, double _score) {
-            Chromosome<int> chromosome = new Chromosome<int>(chrmosomesize);
+            Chromosome<int> chromosome = new Chromosome<int>(chromosomesize);
             chromosome.value = _value;
             chromosome.score = _score;
             chromosomes.Add(chromosome);
@@ -80,23 +80,26 @@ namespace GeneticAlgorithm {
             chromosomes[individual].score = _score;
         }
 
-        public void CrossOverChromosomes(int index1, int index2, int point1, int point2) {
+        public void CrossOverChromosomes(int individual1, int individual2, int point1, int point2) {
             int tmppoint = point1;
             if (point1 > point2) {
                 point1 = point2;
                 point2 = tmppoint;
             }
-            var chromosome1 = chromosomes[index1];
-            var chromosome2 = chromosomes[index2];
+            var chromosome1 = new Chromosome<int>(chromosomesize) { score = chromosomes[individual1].score};
+            var chromosome2 = new Chromosome<int>(chromosomesize) { score = chromosomes[individual2].score};
+            chromosomes[individual1].value.CopyTo(chromosome1.value, 0);
+            chromosomes[individual2].value.CopyTo(chromosome2.value, 0);
+
             int[] tmp = new int[point2 - point1 + 1];
             for (int i = 0; i < tmp.Length; i++) {
-                tmp[i] = ReadChromosome(index1, i + point1);
+                tmp[i] = ReadChromosome(individual1, i + point1);
             }
             for (int i = 0; i < tmp.Length; i++) {
-                SetChromosome(index1, i + point1, ReadChromosome(index2, i + point1));
+                SetChromosome(individual1, i + point1, ReadChromosome(individual2, i + point1));
             }
             for (int i = 0; i < tmp.Length; i++) {
-                SetChromosome(index2, i + point1, tmp[i]);
+                SetChromosome(individual2, i + point1, tmp[i]);
             }
             chromosomes.Add(chromosome1);
             chromosomes.Add(chromosome2);
