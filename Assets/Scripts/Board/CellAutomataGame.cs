@@ -35,7 +35,7 @@ namespace Board {
         public void UpdateGameBoard() {
             myCellGrid.UpdateBoard();
             enemyCellGrid.UpdateBoard();
-            ApplyCellFunctionToGrids();
+            // ApplyCellFunctionToGrids(); まだ動かない
             ApplyCollision();
         }
 
@@ -87,9 +87,23 @@ namespace Board {
                     //
                     break;
                 case CellFunction.Turret:
-                    // TODO : 最も優先度の高く近いセル/プレイヤーを攻撃
+                    // TODO : 最もコストの高いセルorプレイヤーを攻撃(関数として分けたほうがいいかな？)
                     if((AnotherPlayerChracter.GetPosition() - new Vector2(x, y)).magnitude >= CellStatusType.TURRETRANGE) {
-                        
+                        int minDistance = 999999999;
+                        int maxCost = -1;
+                        (int dx, int dy) position = (0, 0);
+                        for(int i = -CellStatusType.TURRETRANGE; i <= CellStatusType.TURRETRANGE; i++) {
+                            for(int j = -CellStatusType.TURRETRANGE; j <= CellStatusType.TURRETRANGE; j++) {
+                                if(cellStatusTypes[AnotherCellGrid.GetCell(false, x + i, y + j)].Cost >= maxCost) {
+                                    maxCost = cellStatusTypes[AnotherCellGrid.GetCell(false, x + i, y + j)].Cost;
+                                    if(i * i + j * j < minDistance) {
+                                        minDistance = i * i + j * j;
+                                        position = (i, j);
+                                    }
+                                }
+                            }
+                        }
+                        AnotherCellGrid.SetCell(false, x + position.dx, y + position.dy, 0);
                     } else {
                         AnotherPlayerChracter.TakeDamage(CellStatusType.TURRETPOWER);
                     }
