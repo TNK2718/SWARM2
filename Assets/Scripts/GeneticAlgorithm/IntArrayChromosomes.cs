@@ -63,7 +63,7 @@ namespace GeneticAlgorithm {
 
         public override void AddChromosome(int[] _value, double _score) {
             Chromosome<int> chromosome = new Chromosome<int>(chromosomesize);
-            chromosome.value = _value;
+            _value.CopyTo(chromosome.value, 0);
             chromosome.score = _score;
             chromosomes.Add(chromosome);
         }
@@ -86,11 +86,12 @@ namespace GeneticAlgorithm {
                 point1 = point2;
                 point2 = tmppoint;
             }
-            var chromosome1 = new Chromosome<int>(chromosomesize) { score = chromosomes[individual1].score};
-            var chromosome2 = new Chromosome<int>(chromosomesize) { score = chromosomes[individual2].score};
-            chromosomes[individual1].value.CopyTo(chromosome1.value, 0);
-            chromosomes[individual2].value.CopyTo(chromosome2.value, 0);
-
+            var value1 = new int[chromosomesize];
+            double score1 = chromosomes[individual1].score;
+            var value2 = new int[chromosomesize];
+            double score2 = chromosomes[individual2].score;
+            chromosomes[individual1].value.CopyTo(value1, 0);
+            chromosomes[individual2].value.CopyTo(value2, 0);
             int[] tmp = new int[point2 - point1 + 1];
             for (int i = 0; i < tmp.Length; i++) {
                 tmp[i] = ReadChromosome(individual1, i + point1);
@@ -101,8 +102,8 @@ namespace GeneticAlgorithm {
             for (int i = 0; i < tmp.Length; i++) {
                 SetChromosome(individual2, i + point1, tmp[i]);
             }
-            chromosomes.Add(chromosome1);
-            chromosomes.Add(chromosome2);
+            AddChromosome(value1, score1);
+            AddChromosome(value2, score2);
         }
 
         public void SortChromosomes() {

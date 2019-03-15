@@ -63,7 +63,8 @@ namespace GeneticAlgorithm {
             Evaluate();
             Crossover(intArrayChromosomes, CROSSOVER_RATE);
             Mutation(intArrayChromosomes, MUTATION_RATE, chromosomeMaxNumber);
-            Reproduce_Ranking(intArrayChromosomes);
+            //Reproduce_Ranking(intArrayChromosomes);
+            Reproduce_Roulette(intArrayChromosomes);
         }
 
         // 交叉
@@ -133,6 +134,24 @@ namespace GeneticAlgorithm {
         // 確率密度関数を吐く（逆関数法）
         private double DensityFunction(System.Random random) {
             return Math.Pow(3.0 * random.NextDouble(), 1.0 / 3.0);
+        }
+
+        // ルーレット選択
+        public void Reproduce_Roulette(IntArrayChromosomes _intarraychromosomes) {
+            _intarraychromosomes.SortChromosomes();
+            var random = new System.Random();
+            double scoreSum = 0;
+            for (int i = 0; i < _intarraychromosomes.GetPopulation(); i++) scoreSum += _intarraychromosomes.ReadScore(i);
+            for (int i = ELITE_POPULATION; i < _intarraychromosomes.GetPopulation() &&
+                _intarraychromosomes.GetPopulation() > POPULATION; i++) {
+                if (random.NextDouble() <= 1 - _intarraychromosomes.ReadScore(i) / scoreSum) {
+                    _intarraychromosomes.RemoveChromosome(i);
+                }
+            }
+            int population = _intarraychromosomes.GetPopulation();
+            for (int i = 0; i < population - POPULATION; i++) {
+                _intarraychromosomes.RemoveChromosome(random.Next(ELITE_POPULATION, _intarraychromosomes.GetPopulation()));
+            }
         }
 
         // int型の累乗計算
