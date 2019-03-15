@@ -11,7 +11,7 @@ namespace GeneticAlgorithm {
     // このクラスのメソッドを呼び出すことで、学習させる。
     public class CellAutomataGA {
         private const int POPULATION = 100;
-        private const int ELITEPOPULATION = 1;
+        private const int ELITE_POPULATION = 1;
         private const int CHROMOSOME_SIZE = 2000;
         private const int MOORE_NEIGHBORHOOD = 9;
         private const int CELL_STATE_SIZE = 8;
@@ -121,15 +121,18 @@ namespace GeneticAlgorithm {
         // 選択・淘汰
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes) {
             _intArrayChromosomes.SortChromosomes();
-            int population = _intArrayChromosomes.GetPopulation();
             var random = new System.Random();
-            for(int i = 0; i < population - POPULATION; i++) {
-                int individual = 
-                    (int) (Math.Pow(3.0 * random.NextDouble(), 1.0 / 3.0) * _intArrayChromosomes.GetPopulation()); // 逆関数法
-                // TODO : 誤差の考察
-                if (individual >= _intArrayChromosomes.GetPopulation()) individual = _intArrayChromosomes.GetPopulation() - 1;
+            int population = _intArrayChromosomes.GetPopulation();
+            for (int i = 0; i < population - POPULATION; i++) {
+                int individual = (int)(DensityFunction(random) * _intArrayChromosomes.GetPopulation()) + ELITE_POPULATION;
+                if (individual >= POPULATION) individual = POPULATION - 1;
                 _intArrayChromosomes.RemoveChromosome(individual);
             }
+        }
+
+        // 確率密度関数を吐く（逆関数法）
+        private double DensityFunction(System.Random random) {
+            return Math.Pow(3.0 * random.NextDouble(), 1.0 / 3.0);
         }
 
         // int型の累乗計算
@@ -145,7 +148,7 @@ namespace GeneticAlgorithm {
             }
         }
 
-        // セルの遷移命令をint型の数に変換する
+        // セルのルールの命令をint型の数に変換する
         private int ConvertToConditionNo(int[] input) {
             int returnvalue = 0;
             for (int i = 0; i <= MOORE_NEIGHBORHOOD; i++) {
