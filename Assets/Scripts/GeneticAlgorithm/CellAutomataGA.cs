@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Board;
+using System.Threading.Tasks;
 
 namespace GeneticAlgorithm {
     // 遺伝的アルゴリズムの実装。
@@ -82,7 +83,7 @@ namespace GeneticAlgorithm {
 
         // 評価をする
         public void Evaluate() {
-            for (int i = 0; i < POPULATION; i++) {
+            Parallel.For(0, POPULATION, i => {
                 CellAutomataGame cellAutomataGame = new CellAutomataGame(
                     intArrayChromosomes.ReadChromosomeAsRule(i), rulesForEvalate, boardSize, INITIAL_RESOURCES);
                 cellAutomataGame.InitializeBoards();
@@ -90,7 +91,7 @@ namespace GeneticAlgorithm {
                     cellAutomataGame.UpdateGameBoard();
                 }
                 intArrayChromosomes.SetScore(i, EvaluateFunction(cellAutomataGame));
-            }
+            });
         }
 
         // 評価関数
