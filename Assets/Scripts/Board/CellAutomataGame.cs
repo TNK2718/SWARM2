@@ -89,14 +89,14 @@ namespace Board {
                 case CellFunction.Turret:
                     // TODO : 最もコストの高いセルorプレイヤーを攻撃(関数として分けたほうがいいかな？)
                     if((AnotherPlayerChracter.GetPosition() - new Vector2(x, y)).magnitude >= CellStatusType.TURRETRANGE) {
-                        int minDistance = 999999999;
+                        int minDistance = CellStatusType.TURRETRANGE;
                         int maxCost = -1;
                         (int dx, int dy) position = (0, 0);
                         for(int i = -CellStatusType.TURRETRANGE; i <= CellStatusType.TURRETRANGE; i++) {
                             for(int j = -CellStatusType.TURRETRANGE; j <= CellStatusType.TURRETRANGE; j++) {
                                 if(cellStatusTypes[AnotherCellGrid.GetCell(false, x + i, y + j)].Cost >= maxCost) {
                                     maxCost = cellStatusTypes[AnotherCellGrid.GetCell(false, x + i, y + j)].Cost;
-                                    if(i * i + j * j < minDistance) {
+                                    if(i * i + j * j <= minDistance) {
                                         minDistance = i * i + j * j;
                                         position = (i, j);
                                     }

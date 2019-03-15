@@ -15,7 +15,7 @@ namespace Character {
     }
 
     // プレイヤーが操作するキャラクターの実装
-    public class PlayerCharacter {
+    public class PlayerCharacter : MonoBehaviour {
         private int Id;
         private bool Owned;  // この端末のプレイヤーかどうか
         private CharacterData characterData = new CharacterData();
@@ -24,7 +24,11 @@ namespace Character {
             new DataBase.SkillDataLoader();
         private DataBase.CharacterDataLoader characterDataLoader =
             new DataBase.CharacterDataLoader();
-        private Board.CellGrid cellGrid;
+        private Board.CellStatusType[] myCellStatusTypes;
+        private Board.CellStatusType[] enemyCellStatusTypes;
+        [SerializeField] private Board.CellGrid myCellGrid;
+        [SerializeField] private Board.CellGrid enemyCellGrid;
+        [SerializeField] private PlayerCharacter enemyCharacter;
         private int boardSize;
 
         public PlayerCharacter(int boardSize) {
@@ -82,10 +86,35 @@ namespace Character {
 
         // スキルの処理
         public void UseSkill(Vector2 targetPosition) {
-            switch (skillDataLoader.skillDataFormats[characterData.CurrentSkillId].SkillType) {
+            var skillData = skillDataLoader.skillDataFormats[characterData.CurrentSkillId];
+            switch (skillData.SkillType) {
                 case DataBase.SkillType.Beam:
+                    for(int i = 0; i < skillData.FloatParameter; i++) {
+                        int power1 = skillData.parameter1;
+                        var direction = targetPosition - GetPosition();
+                        direction.Normalize();
+                        if(enemyCellStatusTypes[
+                            enemyCellGrid.GetCell(true, (int) (i * direction.x), (int) (i * direction.y))].Armor <= power1) {
+
+                        }
+                    }
                     break;
                 case DataBase.SkillType.Bomb:
+                    int power2 = skillData.parameter1;
+                    for(int i = (int) -skillData.FloatParameter; i < skillData.FloatParameter; i++) {
+                        for (int j = (int) -skillData.FloatParameter; j < skillData.FloatParameter; j++) {
+                            if(i * i + j * j <= skillData.FloatParameter && 
+                                power2 >= enemyCellStatusTypes[
+                                    enemyCellGrid.GetCell(true, (int)targetPosition.x + i, (int)targetPosition.y + j)].Armor) {
+                                power2 -= enemyCellStatusTypes[
+                                    enemyCellGrid.GetCell(true, (int)targetPosition.x + i, (int)targetPosition.y + j)].Armor;
+                            }
+                        }
+                    }
+                    if ((enemyCharacter.GetPosition() - targetPosition).magnitude <=
+                        skillData.FloatParameter) {
+                        enemyCharacter.TakeDamage(skillData.parameter1);
+                    }
                     break;
                 case DataBase.SkillType.Construction:
                     break;             
