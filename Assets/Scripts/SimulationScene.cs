@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GeneticAlgorithm;
 using Board;
 using Visual;
@@ -33,8 +34,9 @@ public class SimulationScene : MonoBehaviour {
         Physics.gravity = new Vector3(0, 0, 1f);  // 重力小さめ
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         characterModel = new Character.PlayerCharacter(BOARD_SIZE);
+        cellAutomataGA = new CellAutomataGA(BOARD_SIZE);
         InitUnityGameObjects();
-        StartLearning();
+        SetButtonEventListeners();
     }
 
     void Update() {
@@ -71,6 +73,21 @@ public class SimulationScene : MonoBehaviour {
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
     }
 
+    private void SetButtonEventListeners() {
+        GameObject.Find("LearnButton")
+            .GetComponent<Button>()
+            .onClick.AddListener(StartLearning);
+        GameObject.Find("SimulateButton")
+            .GetComponent<Button>()
+            .onClick.AddListener(() => isSimulating = true);
+        GameObject.Find("LoadButton")
+            .GetComponent<Button>()
+            .onClick.AddListener(StartLearning);
+        GameObject.Find("SaveButton")
+            .GetComponent<Button>()
+            .onClick.AddListener(StartLearning);
+    }
+
     private void InitUnityGameObjects() {
         // カメラ設定
         var camera = GetComponent<Camera>();
@@ -88,15 +105,12 @@ public class SimulationScene : MonoBehaviour {
 
     // 学習開始
     private void StartLearning() {
-        cellAutomataGA = new CellAutomataGA(BOARD_SIZE);
-
         Task.Run(() => {
             for (int i = 0; i < NUM_LEARNING_ITERATION; i++) {
                 cellAutomataGA.NextGeneration();
                 Debug.Log("Episode" + i);
                 cellAutomataGA.ShowScores();
             }
-            isSimulating = true;
         });
         Debug.Log("start!");
     }

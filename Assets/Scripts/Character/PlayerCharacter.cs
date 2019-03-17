@@ -15,7 +15,7 @@ namespace Character {
     }
 
     // プレイヤーが操作するキャラクターの実装
-    public class PlayerCharacter : MonoBehaviour {
+    public class PlayerCharacter {
         private int Id;
         private bool Owned;  // この端末のプレイヤーかどうか
         private CharacterData characterData = new CharacterData();
