@@ -189,5 +189,22 @@ namespace GeneticAlgorithm {
         public int[] EliteRule() {
             return intArrayChromosomes.ReadChromosomeAsRule(0);
         }
+
+        // データのセーブ用
+        public List<int[]> ExportChromosomes() {
+            var data = new List<int[]>();
+            for (int i = 0; i < POPULATION; i++) {
+                data.Add(intArrayChromosomes.ReadChromosomeAsRule(i));
+            }
+            return data;
+        }
+
+        // データのロード用
+        public void ImportChromosomes(List<int[]> data) {
+            Debug.Assert(data.Count == POPULATION);
+            for (int i = 0; i < POPULATION; i++) {
+                intArrayChromosomes.SetChromosomeAsRule(i, data[i]);
+            }
+        }
     }
 }

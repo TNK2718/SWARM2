@@ -182,7 +182,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SWARM
+  m_Text: SWARM2
 --- !u!222 &574513424
 CanvasRenderer:
   m_ObjectHideFlags: 0

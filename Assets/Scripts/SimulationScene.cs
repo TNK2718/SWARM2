@@ -1,11 +1,12 @@
+using Board;
+using GeneticAlgorithm;
 using System;
-using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using GeneticAlgorithm;
-using Board;
 using Visual;
 
 public class SimulationScene : MonoBehaviour {
@@ -19,9 +20,9 @@ public class SimulationScene : MonoBehaviour {
     private CellAutomataGA cellAutomataGA;
     private CellAutomataGame cellAutomataGame;
     private CellGridView cellGridView;
+    private Character.PlayerCharacter characterModel;
     private CharacterView characterView;
     private Vector2 prevFrameMousePosition;
-    private Character.PlayerCharacter characterModel;
 
     private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 8;
@@ -41,29 +42,30 @@ public class SimulationScene : MonoBehaviour {
 
     void Update() {
         if (!isSimulating) {
-            // 学習が終わるまではシミュレーションを開始しない
             return;
         }
-        if (cellAutomataGame == null) {
-            cellAutomataGame = new CellAutomataGame(
-                cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE, INITIAL_RESOURCE);
-
-            cellAutomataGame.InitializeBoards();
-        }
-
-        var mouseHoveredCell = cellGridView.GetMouseHoveredCell();
-        UpdateSelectionSphere(mouseHoveredCell);
-        characterModel.Update(mouseHoveredCell);
-        characterSprite.transform.position =
-            CellGridView.boardPosTo3DPos(BOARD_SIZE, characterModel.GetPosition().x, characterModel.GetPosition().y) +
-            new Vector3(0, 0, -0.7f);
 
         if (Time.frameCount % BOARD_UPDATE_INTERVAL == 0) {
             cellAutomataGame.UpdateGameBoard();
         }
-        cellGridView.Update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
 
-        // ドラッグで画面スクロール
+        var mouseHoveredCell = cellGridView.GetMouseHoveredCell();
+        characterModel.Update(mouseHoveredCell);
+
+        UpdateGameObjects(mouseHoveredCell);
+        HandleMouseInput();
+    }
+
+    private void StartSimulation() {
+        cellAutomataGame = new CellAutomataGame(
+            cellAutomataGA.EliteRule(), cellAutomataGA.rulesForEvalate, BOARD_SIZE, INITIAL_RESOURCE);
+
+        cellAutomataGame.InitializeBoards();
+        isSimulating = true;
+    }
+
+    private void HandleMouseInput() {
+        // スクリーンをドラッグしてスクロール
         if (Input.GetMouseButton(0)) {
             Camera.main.transform.position += new Vector3(
                 Input.mousePosition.x - prevFrameMousePosition.x,
@@ -73,19 +75,57 @@ public class SimulationScene : MonoBehaviour {
         prevFrameMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
     }
 
+    private void UpdateGameObjects((bool found, int x, int y) mouseHoveredCell) {
+        // キャラクター
+        characterSprite.transform.position =
+            CellGridView.boardPosTo3DPos(BOARD_SIZE, characterModel.GetPosition().x, characterModel.GetPosition().y) +
+            new Vector3(0, 0, -0.7f);
+
+        // ボード
+        cellGridView.Update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
+
+        // マウスの選択範囲のハイライト
+        UpdateSelectionSphere(mouseHoveredCell);
+    }
+
     private void SetButtonEventListeners() {
+        // [Learn] を押すと、学習が開始される。学習の状態はコンソールに出力される。
+        // [Simulate] を押すと、シミュレーションが開始される。今は学習と同時にシミュレーションできるが、バグるかも。
+        // [Save] を押すと、cellAutomataGAが持つ
         GameObject.Find("LearnButton")
             .GetComponent<Button>()
             .onClick.AddListener(StartLearning);
         GameObject.Find("SimulateButton")
             .GetComponent<Button>()
-            .onClick.AddListener(() => isSimulating = true);
+            .onClick.AddListener(StartSimulation);
         GameObject.Find("LoadButton")
             .GetComponent<Button>()
-            .onClick.AddListener(StartLearning);
+            .onClick.AddListener(LoadChromosomes);
         GameObject.Find("SaveButton")
             .GetComponent<Button>()
-            .onClick.AddListener(StartLearning);
+            .onClick.AddListener(SaveChromosomes);
+    }
+
+    private void LoadChromosomes() {
+        var saveDataStr = PlayerPrefs.GetString("Chromosomes", "");
+        Debug.Assert(saveDataStr != "");
+        var saveDataArray = new List<int[]>();
+        foreach (var line in saveDataStr.Split('\n')) {
+            if (line != "") {
+                saveDataArray.Add(Array.ConvertAll(line.Split(','), (s) => int.Parse(s)));
+            }
+        }
+        cellAutomataGA.ImportChromosomes(saveDataArray);
+    }
+
+    private void SaveChromosomes() {
+        int i = 0;
+        var saveDataStr = new System.Text.StringBuilder();
+        cellAutomataGA.ExportChromosomes().ForEach((chromosome) => {
+            saveDataStr.Append(String.Join(",", chromosome));
+            saveDataStr.Append("\n");
+        });
+        PlayerPrefs.SetString("Chromosomes", saveDataStr.ToString());
     }
 
     private void InitUnityGameObjects() {
