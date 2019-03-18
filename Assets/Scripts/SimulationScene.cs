@@ -91,7 +91,8 @@ public class SimulationScene : MonoBehaviour {
     private void SetButtonEventListeners() {
         // [Learn] を押すと、学習が開始される。学習の状態はコンソールに出力される。
         // [Simulate] を押すと、シミュレーションが開始される。今は学習と同時にシミュレーションできるが、バグるかも。
-        // [Save] を押すと、cellAutomataGAが持つ
+        // [Save] を押すと、cellAutomataGAが持つChromosomeをPlayerPrefsに保存する。
+        // [Load] を押すと、PlayerPrefsからChromosomeを読み込む。
         GameObject.Find("LearnButton")
             .GetComponent<Button>()
             .onClick.AddListener(StartLearning);
