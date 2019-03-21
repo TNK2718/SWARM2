@@ -11,14 +11,14 @@ namespace GeneticAlgorithm {
     // 遺伝的アルゴリズムの実装。
     // このクラスのメソッドを呼び出すことで、学習させる。
     public class CellAutomataGA {
-        private const int POPULATION = 100;
-        private const int ELITE_POPULATION = 1;
-        private const int CHROMOSOME_SIZE = 2000;
+        private const int POPULATION = 200;
+        private const int ELITE_POPULATION = 4;
+        private const int CHROMOSOME_SIZE = 2000; // ちなみにLangtonLoopは約1000
         private const int MOORE_NEIGHBORHOOD = 9;
         private const int CELL_STATE_SIZE = 8;
-        private const double CROSSOVER_RATE = 1;
-        private const double MUTATION_RATE = 0.2;
-        private const double MUTATION_RANGE = 0.05;
+        private const double CROSSOVER_RATE = 0.7;
+        private const double MUTATION_RATE = 0.02; // 1-2%が一般的
+        private const double MUTATION_RANGE = 0.01; // 0.005-0.01が良いらしい
         private const double STABILITY = 1;
         private const int EPISODES_FOR_EVALATION = 50;
         private const int INITIAL_RESOURCES = 100;
@@ -110,17 +110,20 @@ namespace GeneticAlgorithm {
         // 突然変異
         public void Mutation(IntArrayChromosomes intChromosomes, double mutationrate, int chromosomeMaxNumber) {
             System.Random random = new System.Random();
-            for (int i = 0; i < POPULATION; i++) {
+            for (int i = 0; i < POPULATION; i++) {// Change
                 double rndnum = random.NextDouble();
                 if (rndnum <= mutationrate) {
-                    for (int j = 0; j < CHROMOSOME_SIZE * MUTATION_RANGE; j++) {
-                        intChromosomes.SetChromosome(i, random.Next(0, CHROMOSOME_SIZE), random.Next(0, chromosomeMaxNumber));
+                    int startIndex = random.Next(0, (int)(CHROMOSOME_SIZE * (1 - MUTATION_RANGE)));
+                    for (int j = startIndex; j < startIndex + CHROMOSOME_SIZE * MUTATION_RANGE; j++) {
+                        intChromosomes.SetChromosome(
+                            i, random.Next(0, CHROMOSOME_SIZE), random.Next(0, chromosomeMaxNumber));
                     }
                 }
             }
         }
 
         // 選択・淘汰
+        //ランキング選択
         public void Reproduce_Ranking(IntArrayChromosomes _intArrayChromosomes) {
             _intArrayChromosomes.SortChromosomes();
             var random = new System.Random();

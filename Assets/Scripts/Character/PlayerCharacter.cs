@@ -103,7 +103,7 @@ namespace Character {
                     int power2 = skillData.parameter1;
                     for(int i = (int) -skillData.FloatParameter; i < skillData.FloatParameter; i++) {
                         for (int j = (int) -skillData.FloatParameter; j < skillData.FloatParameter; j++) {
-                            if(i * i + j * j <= skillData.FloatParameter && 
+                            if(i * i + j * j <= skillData.FloatParameter * skillData.FloatParameter && 
                                 power2 >= enemyCellStatusTypes[
                                     enemyCellGrid.GetCell(true, (int)targetPosition.x + i, (int)targetPosition.y + j)].Armor) {
                                 power2 -= enemyCellStatusTypes[
