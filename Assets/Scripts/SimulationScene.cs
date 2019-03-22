@@ -24,7 +24,7 @@ public class SimulationScene : MonoBehaviour {
     private CharacterView characterView;
     private Vector2 prevFrameMousePosition;
 
-    private readonly int NUM_LEARNING_ITERATION = 3;
+    private readonly int NUM_LEARNING_ITERATION = 10;
     private readonly int BOARD_SIZE = 8;
     private readonly int BOARD_UPDATE_INTERVAL = 30;
     private readonly int INITIAL_RESOURCE = 100;
@@ -66,8 +66,8 @@ public class SimulationScene : MonoBehaviour {
 
     private void HandleMouseInput() {
         // スクリーンをドラッグしてスクロール
-        if (Input.GetMouseButton(0)) {
-            Camera.main.transform.position += new Vector3(
+        if (Input.GetMouseButton(1)) {
+            Camera.main.transform.position -= new Vector3(
                 Input.mousePosition.x - prevFrameMousePosition.x,
                 Input.mousePosition.y - prevFrameMousePosition.y,
                 0) * 0.03f;
@@ -82,7 +82,7 @@ public class SimulationScene : MonoBehaviour {
             new Vector3(0, 0, -0.7f);
 
         // ボード
-        cellGridView.Update(cellAutomataGame.GetMyBoardData(), cellAutomataGame.GetEnemyBoardData());
+        cellGridView.UpdateGridView(cellAutomataGame.GetMyBoardData(), cellAutomataGame.GetEnemyBoardData());
 
         // マウスの選択範囲のハイライト
         UpdateSelectionSphere(mouseHoveredCell);
@@ -152,6 +152,7 @@ public class SimulationScene : MonoBehaviour {
                 Debug.Log("Episode" + i);
                 cellAutomataGA.ShowScores();
             }
+            Debug.Log("finish!");
         });
         Debug.Log("start!");
     }
