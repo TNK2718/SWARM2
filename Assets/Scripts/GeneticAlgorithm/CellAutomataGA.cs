@@ -19,7 +19,6 @@ namespace GeneticAlgorithm {
         private const double CROSSOVER_RATE = 0.7;
         private const double MUTATION_RATE = 0.02; // 1-2%が一般的
         private const double MUTATION_RANGE = 0.01; // 0.005-0.01が良いらしい
-        private const double STABILITY = 1;
         private const int EPISODES_FOR_EVALATION = 50;
         private const int INITIAL_RESOURCES = 100;
         private int chromosomeMaxNumber;

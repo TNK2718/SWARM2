@@ -9,12 +9,12 @@ namespace Board {
     // キャラクターは管理しない。
     class CellGrid {
         private int BOARD_SIZE;
-        public readonly int CELL_STATE_SIZE = 8;
         private readonly int NUM_MOORE_NEIGHBORHOOD = 9;
         public int[,] board;
         private int[,] board_buffer;
         private int[] rules;
         private int resource;
+        private int cellStateSize;
         public int Resource {
             get { return resource; }
             set {
@@ -24,13 +24,14 @@ namespace Board {
         }
         public CellStatusType[] CellStatusType { get; set; }
 
-        public CellGrid(int[] rules_in, int boardsize, int initialResource) {
+        public CellGrid(int[] rules_in, int boardsize, int initialResource, int _cellStateSize) {
             BOARD_SIZE = boardsize;
             Resource = initialResource;
+            cellStateSize = _cellStateSize;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
-            CellStatusType = new CellStatusType[CELL_STATE_SIZE];
-            for (int i = 0; i < CELL_STATE_SIZE; i++) CellStatusType[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
+            CellStatusType = new CellStatusType[cellStateSize];
+            for (int i = 0; i < cellStateSize; i++) CellStatusType[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -58,7 +59,7 @@ namespace Board {
         public int GetConditionsNo(bool is_board, int x, int y) {
             int result = 0;
             for (int i = 0; i < NUM_MOORE_NEIGHBORHOOD; i++) {
-                result += FastPower(CELL_STATE_SIZE, i) * GetCell(is_board, x + i % 3 - 1, y + i / 3 - 1);
+                result += FastPower(cellStateSize, i) * GetCell(is_board, x + i % 3 - 1, y + i / 3 - 1);
             }
             return result;
         }
@@ -79,18 +80,18 @@ namespace Board {
             for (int x = 0; x < BOARD_SIZE; x++) {
                 for (int y = 0; y < BOARD_SIZE; y++) {
                     int rule = -1;
-                    for (int i = 0; i < CELL_STATE_SIZE; i++) {
+                    for (int i = 0; i < cellStateSize; i++) {
                         int index = Array.BinarySearch(
                             rules,
                             GetConditionsNo(true, x, y)
-                                + (CELL_STATE_SIZE - 1 - i) * FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)
+                                + (cellStateSize - 1 - i) * FastPower(cellStateSize, NUM_MOORE_NEIGHBORHOOD)
                             );
                         if (index >= 0) rule = rules[index];
                         if (rule >= 0) break;
                     }
-                    if (rule >= 0 && rule % FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD) != 0
-                        && Resource >= CellStatusType[rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)].Cost) {
-                        SetCell(false, x, y, rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD));
+                    if (rule >= 0 && rule % FastPower(cellStateSize, NUM_MOORE_NEIGHBORHOOD) != 0
+                        && Resource >= CellStatusType[rule / FastPower(cellStateSize, NUM_MOORE_NEIGHBORHOOD)].Cost) {
+                        SetCell(false, x, y, rule / FastPower(cellStateSize, NUM_MOORE_NEIGHBORHOOD));
                         ConsumeResuorce(GetCell(true, x, y), GetCell(false, x, y), CellStatusType);
                     }
                 }
