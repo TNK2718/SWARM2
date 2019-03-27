@@ -32,7 +32,7 @@ namespace Visual {
             }
         }
 
-        public void UpdateGridView(List<List<bool>> myBoardData, List<List<bool>> enemyBoardData) {
+        public void Update(List<List<bool>> myBoardData, List<List<bool>> enemyBoardData) {
             for (int y = 0; y < myBoardData.Count; y++) {
                 for (int x = 0; x < myBoardData[0].Count; x++) {
                     // 地面を描画
