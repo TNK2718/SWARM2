@@ -7,12 +7,10 @@ using UnityEngine;
 namespace Board {
     class CellAutomataGame {
         public int boardSize;
-        public const int cellStateSize = 10;
         public CellGrid myCellGrid;  // 自分のセルを管理するBoard
         public CellGrid enemyCellGrid;  // 敵のセルを管理するBoard
         private CellStatusType[] myCellStatusTypes;
         private CellStatusType[] enemyCellStatusTypes;
-        private DataBase.CellDataLoader cellDataLoader;
         [SerializeField] private Character.PlayerCharacter myPlayerCharacter;
         [SerializeField] private Character.PlayerCharacter enemyPlayerChracter;
 
@@ -22,19 +20,22 @@ namespace Board {
 
         public CellAutomataGame(int[] rules_in1, int[] rules_in2, int initBoardSize, int initialResource) {
             boardSize = initBoardSize;
-            myCellGrid = new CellGrid(rules_in1, boardSize, initialResource, cellStateSize);
-            enemyCellGrid = new CellGrid(rules_in2, boardSize, initialResource, cellStateSize);
-            myCellStatusTypes = new CellStatusType[cellStateSize];
-            enemyCellStatusTypes = new CellStatusType[cellStateSize];
-            cellDataLoader = new DataBase.CellDataLoader(cellStateSize);
-            cellDataLoader.CellStatusTypes.CopyTo(myCellStatusTypes, 0);
-            cellDataLoader.CellStatusTypes.CopyTo(enemyCellStatusTypes, 0);
+            myCellGrid = new CellGrid(rules_in1, boardSize, initialResource);
+            enemyCellGrid = new CellGrid(rules_in2, boardSize, initialResource);
+            myCellStatusTypes = new CellStatusType[myCellGrid.CELL_STATE_SIZE];
+            enemyCellStatusTypes = new CellStatusType[enemyCellGrid.CELL_STATE_SIZE];
+            for (int i = 0; i < myCellGrid.CELL_STATE_SIZE; i++) {
+                myCellStatusTypes[i] = new CellStatusType();
+            }
+            for (int i = 0; i < enemyCellGrid.CELL_STATE_SIZE; i++) {
+                enemyCellStatusTypes[i] = new CellStatusType();
+            }
         }
 
         public void UpdateGameBoard() {
             myCellGrid.UpdateBoard();
             enemyCellGrid.UpdateBoard();
-            ApplyCellFunctionToGrids();
+            // ApplyCellFunctionToGrids(); まだ動かない
             ApplyCollision();
         }
 
@@ -117,7 +118,7 @@ namespace Board {
             enemyCellGrid.SetCell(true, boardSize - 1, boardSize - 1, 1);
         }
 
-        public List<List<Boolean>> GetMyBoardData() {
+        public List<List<Boolean>> getMyBoardData() {
             var data = new List<List<Boolean>>();
             for (int y = 0; y < boardSize; y++) {
                 var row = new List<Boolean>();
@@ -129,7 +130,7 @@ namespace Board {
             return data;
         }
 
-        public List<List<Boolean>> GetEnemyBoardData() {
+        public List<List<Boolean>> getEnemyBoardData() {
             var data = new List<List<Boolean>>();
             for (int y = 0; y < boardSize; y++) {
                 var row = new List<Boolean>();

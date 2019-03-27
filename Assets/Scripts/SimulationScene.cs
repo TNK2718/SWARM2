@@ -24,7 +24,7 @@ public class SimulationScene : MonoBehaviour {
     private CharacterView characterView;
     private Vector2 prevFrameMousePosition;
 
-    private readonly int NUM_LEARNING_ITERATION = 3;
+    private readonly int NUM_LEARNING_ITERATION = 1;
     private readonly int BOARD_SIZE = 8;
     private readonly int BOARD_UPDATE_INTERVAL = 30;
     private readonly int INITIAL_RESOURCE = 100;
@@ -82,7 +82,7 @@ public class SimulationScene : MonoBehaviour {
             new Vector3(0, 0, -0.7f);
 
         // ボード
-        cellGridView.Update(cellAutomataGame.GetMyBoardData(), cellAutomataGame.GetEnemyBoardData());
+        cellGridView.Update(cellAutomataGame.getMyBoardData(), cellAutomataGame.getEnemyBoardData());
 
         // マウスの選択範囲のハイライト
         UpdateSelectionSphere(mouseHoveredCell);

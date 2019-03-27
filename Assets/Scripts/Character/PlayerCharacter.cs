@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 
 namespace Character {
-    // キャラクターのデータ
     public class CharacterData {
         public PlayerCharacterStatus Status = new PlayerCharacterStatus();
         public List<Buff> Buffs = new List<Buff>();
