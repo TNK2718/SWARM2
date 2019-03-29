@@ -35,7 +35,7 @@ namespace Board {
         public void UpdateGameBoard() {
             myCellGrid.UpdateBoard();
             enemyCellGrid.UpdateBoard();
-            // ApplyCellFunctionToGrids(); まだ動かない
+            ApplyCellFunctionToGrids();
             ApplyCollision();
         }
 
