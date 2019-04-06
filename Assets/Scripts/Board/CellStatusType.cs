@@ -6,5 +6,11 @@ namespace Board {
         public int Armor { get; set; }
         public int Cost { get; set; }
         public CellFunction CellFunction { get; set; }
+
+        public CellStatusType(int _armor, int _cost, string _cellfunction) {
+            Armor = _armor;
+            Cost = _cost;
+            CellFunction = (CellFunction) System.Enum.Parse(typeof(CellFunction), _cellfunction);
+        }
     }
 }

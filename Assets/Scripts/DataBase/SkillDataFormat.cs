@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace DataBase {
     public class SkillDataFormat {
         public int Id;
+        public string SkillName;
+        public string Description;
         public SkillType SkillType;
         public AreaType AreaType;
         public float FloatParameter;
@@ -14,11 +16,13 @@ namespace DataBase {
         public int parameter2;
         public int parameter3;
 
-        public SkillDataFormat(int _id, int _skillType, int _areaType, float _fParameter, 
+        public SkillDataFormat(int _id, string _skillname, string _description, string _skillType, string _areaType, float _fParameter, 
             int _parameter1, int _parameter2, int _parameter3) {
             Id = _id;
-            SkillType = (SkillType) _skillType;
-            AreaType = (AreaType)_areaType;
+            SkillName = _skillname;
+            Description = _description;
+            SkillType = (SkillType) Enum.Parse(typeof(SkillType), _skillType);
+            AreaType = (AreaType) Enum.Parse(typeof(AreaType), _areaType);
             FloatParameter = _fParameter;
             parameter1 = _parameter1;
             parameter2 = _parameter2;

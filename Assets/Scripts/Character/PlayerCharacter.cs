@@ -23,7 +23,7 @@ namespace Character {
         private DataBase.SkillDataLoader skillDataLoader =
             new DataBase.SkillDataLoader();
         private DataBase.CharacterDataLoader characterDataLoader =
-            new DataBase.CharacterDataLoader();
+            new DataBase.CharacterDataLoader(DataBase.CharacterDataFormat.CHRACTERNUM);
         private Board.CellStatusType[] myCellStatusTypes;
         private Board.CellStatusType[] enemyCellStatusTypes;
         [SerializeField] private Board.CellGrid myCellGrid;

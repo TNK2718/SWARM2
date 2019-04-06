@@ -6,14 +6,15 @@ namespace DataBase {
         public List<SkillDataFormat> skillDataFormats;
         private string[,] data;
 
-        public SkillDataLoader(int cellStateSize) {
+        public SkillDataLoader() {
             skillDataFormats = new List<SkillDataFormat>();
-            ReadCSV("", ref data);
-            for (int i = 0; i < cellStateSize; i++) {
-                skillDataFormats[i] = new SkillDataFormat(
-                    int.Parse(data[i, 0]), int.Parse(data[i, 1]), int.Parse(data[i, 2]), float.Parse(data[i, 3]), 
-                    int.Parse(data[i, 4]), int.Parse(data[i, 5]), int.Parse(data[i, 6])
+            ReadCSV("/Scripts/DataBase/CSVData/SkillData.csv", ref data);
+            for (int i = 0; i < data.GetLength(0); i++) {
+                SkillDataFormat tmp = new SkillDataFormat(
+                    int.Parse(data[i, 0]), data[i, 1], data[i, 2], data[i, 3], 
+                    data[i, 4], float.Parse(data[i, 5]), int.Parse(data[i, 6]), int.Parse(data[i, 7]), int.Parse(data[i, 8])
                     );
+                skillDataFormats.Add(tmp);
             }
         }
     }

@@ -8,7 +8,7 @@ namespace DataBase {
 
         public CharacterDataLoader(int characterNumber) {
             characterDataFormats = new CharacterDataFormat[characterNumber];
-            ReadCSV("", ref data);
+            ReadCSV("/Scripts/DataBase/CSVData/ChracterData.csv", ref data);
             for (int i = 0; i < characterNumber; i++) {
                 int[] skillList = new int[CharacterDataFormat.SKILLNUM];
                 for(int j = 0; j < CharacterDataFormat.SKILLNUM; j++) {

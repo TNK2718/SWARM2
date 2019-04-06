@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace DataBase {
     public enum AreaType {
-
+        None
     }
 }

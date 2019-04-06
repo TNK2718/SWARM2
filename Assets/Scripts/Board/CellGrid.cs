@@ -9,7 +9,7 @@ namespace Board {
     // キャラクターは管理しない。
     class CellGrid {
         private int BOARD_SIZE;
-        public readonly int CELL_STATE_SIZE = 8;
+        public const int CELL_STATE_SIZE = 8;
         private readonly int NUM_MOORE_NEIGHBORHOOD = 9;
         public int[,] board;
         private int[,] board_buffer;
@@ -22,15 +22,21 @@ namespace Board {
                 if (value < 0) resource = 0;
             }
         }
-        public CellStatusType[] CellStatusType { get; set; }
+        public CellStatusType[] CellStatusTypes { get; set; }
+        private DataBase.CellDataLoader CellDataLoader;
 
         public CellGrid(int[] rules_in, int boardsize, int initialResource) {
             BOARD_SIZE = boardsize;
             Resource = initialResource;
             board = new int[BOARD_SIZE, BOARD_SIZE];
             board_buffer = new int[BOARD_SIZE, BOARD_SIZE];
-            CellStatusType = new CellStatusType[CELL_STATE_SIZE];
-            for (int i = 0; i < CELL_STATE_SIZE; i++) CellStatusType[i] = new CellStatusType() { Armor = 0, Cost = 1, CellFunction =  CellFunction.Normal};
+            CellStatusTypes = new CellStatusType[CELL_STATE_SIZE];
+            CellDataLoader = new DataBase.CellDataLoader(CELL_STATE_SIZE);
+            for(int i = 0; i < CELL_STATE_SIZE; i++) {
+                CellStatusTypes[i] = new CellStatusType(CellDataLoader.cellDataFormats[i].Armor, 
+                    CellDataLoader.cellDataFormats[i].Cost,
+                    CellDataLoader.cellDataFormats[i].CellFunction);
+            }
             rules = rules_in;
             Array.Sort(rules);
             ClearBoard();
@@ -89,9 +95,9 @@ namespace Board {
                         if (rule >= 0) break;
                     }
                     if (rule >= 0 && rule % FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD) != 0
-                        && Resource >= CellStatusType[rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)].Cost) {
+                        && Resource >= CellStatusTypes[rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD)].Cost) {
                         SetCell(false, x, y, rule / FastPower(CELL_STATE_SIZE, NUM_MOORE_NEIGHBORHOOD));
-                        ConsumeResuorce(GetCell(true, x, y), GetCell(false, x, y), CellStatusType);
+                        ConsumeResuorce(GetCell(true, x, y), GetCell(false, x, y), CellStatusTypes);
                     }
                 }
             }

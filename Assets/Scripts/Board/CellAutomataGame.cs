@@ -22,14 +22,8 @@ namespace Board {
             boardSize = initBoardSize;
             myCellGrid = new CellGrid(rules_in1, boardSize, initialResource);
             enemyCellGrid = new CellGrid(rules_in2, boardSize, initialResource);
-            myCellStatusTypes = new CellStatusType[myCellGrid.CELL_STATE_SIZE];
-            enemyCellStatusTypes = new CellStatusType[enemyCellGrid.CELL_STATE_SIZE];
-            for (int i = 0; i < myCellGrid.CELL_STATE_SIZE; i++) {
-                myCellStatusTypes[i] = new CellStatusType();
-            }
-            for (int i = 0; i < enemyCellGrid.CELL_STATE_SIZE; i++) {
-                enemyCellStatusTypes[i] = new CellStatusType();
-            }
+            myCellStatusTypes = myCellGrid.CellStatusTypes;
+            enemyCellStatusTypes = enemyCellGrid.CellStatusTypes;
         }
 
         public void UpdateGameBoard() {

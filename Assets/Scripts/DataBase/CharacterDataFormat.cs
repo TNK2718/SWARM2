@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace DataBase {
     public class CharacterDataFormat{
-        public const int SKILLNUM = 4; // skillの数は４つ
+        public const int CHRACTERNUM = 1; // キャラクターの数
+        public const int SKILLNUM = 3; // skillの数は４つ
         public const int BUFFNUM = 5; // buffは５つ
 
         public int Id { get; set; }
