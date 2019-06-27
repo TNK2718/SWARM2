@@ -1,4 +1,4 @@
-新レポジトリ: https://github.com/TNK2718/SWARM_piston/new/master?readme=1
+新レポジトリ: https://github.com/TNK2718/SWARM_piston/
 
 # SWARM2
 セルオートマトンを基にしたゲームです。
